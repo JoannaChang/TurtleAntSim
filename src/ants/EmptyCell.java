@@ -1,19 +1,17 @@
 package ants;
 
-public class BridgeCell implements Cell {
+public class EmptyCell implements Cell {
 
-	// row and column the cell is in
-	private int row, col;
+	// row, column, and layer the cell is in
+	private int row, col, layer;
 
 	// type of cell
-	private int type = Cell.BRIDGE;
+	private int type = Cell.EMPTY;
 
 	// keep track of pheromone and ants in nest
 	private int pheromone = 0;
-	private int numAnts = 0;
-
 	private int newPher = 0;
-	
+	private int numAnts = 0;
 
 	// if the cell has been visited by an ant
 	private boolean visited = false;
@@ -25,6 +23,8 @@ public class BridgeCell implements Cell {
 	private int maxPher;
 
 	private Bridge bridge = null;
+
+	private boolean hasBridge = false;
 	
 	private double decayRate;
 
@@ -34,12 +34,14 @@ public class BridgeCell implements Cell {
 	 * @param row
 	 * @param col
 	 */
-	public BridgeCell(int row, int col, int pherStrength, int maxPher, double decayRate) {
+	public EmptyCell(int layer, int row, int col, int pherStrength, int maxPher, double decayRate) {
 		this.pherStrength = pherStrength;
 		this.maxPher = maxPher;
 		this.row = row;
 		this.col = col;
-		this.decayRate=decayRate;
+		this.layer = layer;
+		
+		this.decayRate = decayRate;
 	}
 
 	public int getType() {
@@ -55,17 +57,15 @@ public class BridgeCell implements Cell {
 	}
 
 	public int getLayer() {
-		// do nothing
-		return 0;
+		return layer;
 	}
 
 	synchronized public void visit(int antID) {
-//		pheromone = Math.min(pheromone + pherStrength, maxPher);
+		 pheromone = Math.min(pheromone + pherStrength, maxPher);
 
-		newPher = Math.min(newPher + pherStrength, maxPher);
+//		newPher = Math.min(newPher + pherStrength, maxPher);
 		numAnts++;
 		visited = true;
-
 	}
 
 	synchronized public void leave(int antID) {
@@ -76,21 +76,30 @@ public class BridgeCell implements Cell {
 		// do nothing
 	}
 
+	synchronized public void updatePher() {
+//		System.out.println(newPher);
+//		pheromone = newPher;
+	}
+
 	synchronized public void pherDecay() {
-		pheromone = newPher;
+//		System.out.println("before " + pheromone);
+//		pheromone = newPher;
+//		System.out.println("before" + pheromone);
+//		System.out.println("before" + pheromone*decayRate);
+
 		pheromone = Math.max((int) (pheromone - pheromone*decayRate), 0); // was divided by 2
 		if (pheromone <= pherStrength) {
 			visited = false;
 		}
-		newPher = pheromone;
-	}
+//		System.out.println("after" + pheromone);
 
-	synchronized public void updatePher() {
-//		pheromone = newPher;
+//		newPher = pheromone;
 	}
 
 	synchronized public int getPheromone() {
+//		System.out.println(pheromone);
 		return pheromone;
+		
 	}
 
 	synchronized public int getAnts() {
@@ -117,19 +126,17 @@ public class BridgeCell implements Cell {
 		return "Cell: " + row + " " + col;
 	}
 
-	// public Bridge getBridge(Cell cell) {
-	// return null;
-	// }
-
 	public void addBridge(Bridge bridge) {
 		this.bridge = bridge;
+		hasBridge = true;
 	}
 
 	public boolean hasBridge() {
-		return bridge != null;
+		return hasBridge;
 	}
 
 	public Bridge getBridge() {
 		return bridge;
 	}
+
 }
