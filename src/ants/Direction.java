@@ -5,15 +5,39 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+/**
+ * Determines the directionality of ant movement.
+ * 
+ * TODO: make class better with tuple representation rather than string
+ * representation
+ * 
+ * @author Joanna Chang
+ */
+
 public class Direction {
 
-	//// /** constants, representing the 8 directions */
+	// TODO: make constants, representing the 8 directions
 	// public static final Direction UP = new Direction(-1, 0), DOWN = new
 	//// Direction(1, 0), LEFT = new Direction(0, -1),
 	// RIGHT = new Direction(0, 1), UP_RIGHT = new Direction(-1, 1), UP_LEFT = new
 	//// Direction(-1, -1),
 	// DOWN_RIGHT = new Direction(1, 1), DOWN_LEFT = new Direction(1, -1);
 
+	// Steps you can take based on your current direction.
+	// index 0: current position, index 1 & 2: 90 degrees range, index 3 & 4: 180
+	// degrees, index 5 & 6: 270 degrees, index 7: 360 degrees
+	// (e.g.: ints in UP_COL_DIR refer to changes in column indices when you're
+	// facing "UP")
+
+	/**
+	 * Steps you can take based on your current direction.
+	 * 
+	 * index 0: current position, index 1 & 2: 90 degrees range, index 3 & 4: 180
+	 * degrees, index 5 & 6: 270 degrees, index 7: 360 degrees
+	 * 
+	 * (e.g.: ints in UP_COL_DIR refer to changes in column indices when you're
+	 * facing "UP")
+	 */
 	private static final int[] UP_ROW_DIR = new int[] { 0, -1, -1, -1, 0, 0, 1, 1, 1 },
 			UP_COL_DIR = new int[] { 0, 0, -1, 1, -1, 1, -1, 1, 0 },
 
@@ -38,6 +62,7 @@ public class Direction {
 			DOWNRIGHT_ROW_DIR = new int[] { 0, 1, 0, 1, 1, -1, -1, 0, -1 },
 			DOWNRIGHT_COL_DIR = new int[] { 0, 1, 1, 0, -1, 1, 0, -1, -1 };
 
+	// TODO: make this class better by using tuples instead?
 	// private static final Map<Tuple, int[]> COL_STEPS = new HashMap<Tuple,
 	// int[]>();
 	// static {
@@ -64,6 +89,7 @@ public class Direction {
 	// ROW_STEPS.put(new Tuple(1,1), DOWNRIGHT_ROW_DIR);
 	// }
 
+	// map direction to possible col steps
 	private static final Map<String, int[]> COL_STEPS = new HashMap<String, int[]>();
 	static {
 		COL_STEPS.put("0,-1", UP_COL_DIR);
@@ -76,6 +102,7 @@ public class Direction {
 		COL_STEPS.put("1,1", DOWNRIGHT_COL_DIR);
 	}
 
+	// map direction to possible row steps
 	private static final Map<String, int[]> ROW_STEPS = new HashMap<String, int[]>();
 	static {
 		ROW_STEPS.put("0,-1", UP_ROW_DIR);
@@ -88,23 +115,28 @@ public class Direction {
 		ROW_STEPS.put("1,1", DOWNRIGHT_ROW_DIR);
 	}
 
+	// directions are represented by x and y directionality
 	private int xDir = 0, yDir = 0;
 
-	// private Tuple direction;
-
+	// string representing direction
 	private String direction;
 
+	// random generator for turning
 	private Random randomGen = new Random();
 
+	/**
+	 * Constructor for direction
+	 */
 	public Direction() {
+
+		// initiate ants with random direction
 		while (xDir == 0 && yDir == 0) {
 			this.xDir = randomGen.nextInt(3) - 1;
 			this.yDir = randomGen.nextInt(3) - 1;
 		}
 
-		// direction = new Tuple(xDir, yDir);
+		// direction = new Tuple(xDir, yDir); // uncomment for Tuple directions
 		direction = Integer.toString(xDir) + "," + Integer.toString(yDir);
-
 	}
 
 	public int getX() {
@@ -115,22 +147,15 @@ public class Direction {
 		return yDir;
 	}
 
-//	public void changeX(int newX) {
-//		xDir = newX;
-//	}
-//
-//	public void changeY(int newY) {
-//		yDir = newY;
-//	}
-
 	/**
+	 * Turn randomly within a certain range of degrees
 	 * 
-	 * @param degrees
-	 * @pre: degrees is 90,180, 270, or 360
+	 * @pre: degrees is 90, 180, 270, or 360
 	 */
 	public void turn(int degrees) {
 		int[] rowSteps, colSteps;
 
+		// get possible new directions based on range of degrees
 		if (degrees == 90) {
 			rowSteps = Arrays.copyOfRange(ROW_STEPS.get(direction), 2, 4);
 			colSteps = Arrays.copyOfRange(COL_STEPS.get(direction), 2, 4);
@@ -148,47 +173,17 @@ public class Direction {
 		} else {
 			throw new IllegalArgumentException();
 		}
-		
+
 		int choice = randomGen.nextInt(rowSteps.length);
 		xDir = colSteps[choice];
 		yDir = rowSteps[choice];
-		direction = Integer.toString(xDir)+","+Integer.toString(yDir);
+		direction = Integer.toString(xDir) + "," + Integer.toString(yDir);
 	}
 
-	// // 50% chance each of turning left or right
-	// double random = Math.random();
-	//
-	// if(xDir==0)
-	// {
-	// if (random > 0.5) {
-	// changeX(1);
-	// } else {
-	// changeX(-1);
-	// }
-	// }else if(yDir==0)
-	// {
-	// if (random > 0.5) {
-	// changeY(1);
-	// } else {
-	// changeY(-1);
-	// }
-	// }else
-	// {
-	// if (random > 0.5) {
-	// changeX(0);
-	// } else {
-	// changeY(0);
-	// }
-	// }
-	//
-	// // direction = new Tuple(xDir, yDir);
-	// direction=Integer.toString(xDir)+","+Integer.toString(yDir);
-	// }
-
 	/**
+	 * Get possible row steps based on range of degrees (vision_range)
 	 * 
-	 * @param degrees
-	 * @pre: degrees is 90,180, 270, or 360
+	 * @pre: degrees is 90, 180, 270, or 360
 	 */
 	public int[] getRowSteps(int degrees) {
 		if (degrees == 90) {
@@ -204,6 +199,11 @@ public class Direction {
 		}
 	}
 
+	/**
+	 * Get possible col steps based on range of degrees (vision_range)
+	 * 
+	 * @pre: degrees is 90, 180, 270, or 360
+	 */
 	public int[] getColSteps(int degrees) {
 		if (degrees == 90) {
 			return Arrays.copyOfRange(COL_STEPS.get(direction), 0, 4);

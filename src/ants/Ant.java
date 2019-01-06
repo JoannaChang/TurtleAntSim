@@ -11,21 +11,34 @@ import java.util.Map.Entry;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-public class Ant {
+/**
+ * This is an ant. It moves within arena or on a bridge, and its movement is
+ * driven by diffusion and pheromones.
+ * 
+ * @author Joanna Chang
+ */
 
-	// current cell, row, and column of ant
-	private int row, col;
-	private Cell currCell;
+// TODO: see if we can extend Thread?
+public class Ant {
 
 	// ID of ant
 	private int id;
 
 	// World containing all of the cells to be displayed
-	private Cell[][][] world;
+	private Cell[][][] world; // the arena
+	private Cell[][] bridgeWorld; // the bridge
 
 	// Class responsible for writing paint method for repainting the screen
 	private Arena arena;
 
+	// current cell, layer, row, and column of ant
+	private int row, col, currLayer;
+	private Cell currCell;
+
+	// direction that the ant is facing
+	private Direction direction;
+
+	// keep track of bridge crossings and nest enters/exits
 	private List<Activity> activity;
 
 	// pheromone factor
@@ -34,34 +47,26 @@ public class Ant {
 	// if the ant is on a bridge & the bridge it's on
 	private boolean onBridge;
 	private Bridge currBridge;
-	private Cell[][] bridgeWorld;
-	private int currLayer;
 
+	// the bridgeCell the ant is entering a bridge from
 	private Cell entryCell;
 
 	// random generator to determine ant's movement
 	private Random motionGen = new Random();
 
 	// chances of exploration and turning
-
-	// higher chance of exploration got more ants in nests
-	private static final double CHANCE_EXPLORE = 0.5;
-	// private static final double CHANCE_TURN = 0.02;
-
-	// higher chance of turning got more ants in nests
-	private static final double CHANCE_TURN = 0.2; //0.5
+	private static final double CHANCE_EXPLORE = 0.5; // higher chance of exploration got more ants in nests
+	private static final double CHANCE_TURN = 0.2; // higher chance of turning got more ants in nests
 
 	// degree that an ant can turn or see
-	private static final int TURNING_RANGE = 180;//was 270
+	private static final int TURNING_RANGE = 180;
 	private static final int VISION_RANGE = 180;
 
-	private static final int CHANCE_MOVE = 12;//
+	// base weight of a cell during weighted random movement
+	private static final int CHANCE_MOVE = 12;
+
+	// base chance that an ant will exit a nest (50%)
 	private static final int CHANCE_EXIT = 500;
-
-	// private static final int PHER_NOISE = 8;
-
-	// direction that the ant is facing
-	private Direction direction;
 
 	/**
 	 * Constructor for an ant
@@ -77,7 +82,8 @@ public class Ant {
 		this.direction = direction;
 		this.activity = activity;
 
-		currCell = world[0][row][col];
+		// set current position
+		currCell = world[0][this.row][this.col];
 		currLayer = 0;
 	}
 
@@ -98,16 +104,9 @@ public class Ant {
 			direction.turn(TURNING_RANGE);
 		}
 
-		// TODO: make probability of leaving lower
+		// TODO: make probability of leaving lower?
 
 		// move if the ant is not in a nest or has the chance to come out of a nest
-
-		// if (currCell.getType() == Cell.NEST && (chanceOut < 1 / (Math.pow(2, (double)
-		// currCell.getPheromone() / pherFactor)))){
-		// System.out.println(1);
-		// }
-
-		// double ok
 		if (currCell.getType() != Cell.NEST
 				|| chanceOut < CHANCE_EXIT / (Math.pow(2, (double) currCell.getPheromone() / pherFactor))) {
 			makeNextMove();
@@ -117,17 +116,23 @@ public class Ant {
 		else if (currCell.getType() == Cell.NEST) {
 			currCell.addPher();
 		}
-		
-//		if (currCell.getType() == Cell.NEST) {
-//			System.out.println(arena.getNumSteps() + " "+ id + " " + currCell + " "+ currCell.getPheromone());
-//		}
 	}
 
+	/**
+	 * Determine and make the next move. The movement is based on either weighted
+	 * random movement or ranked random movement, according to the amount of
+	 * pheromone in surrounding cells
+	 * 
+	 * TODO: test weighted vs ranked movement
+	 */
 	synchronized private void makeNextMove() {
-		Cell nextCell = chooseWeightedMove(); // changed based on ranked/weighted moves
+
+		// determine the next cell to move into
+		Cell nextCell = chooseWeightedMove(); // change based on ranked/weighted movement
 
 		// get off the bridge if you're on the ends
 		if (onBridge && currBridge.crossable(nextCell)) {
+			// note if you've crossed a bridge
 			if (nextCell != entryCell) {
 				activity.add(new Activity(arena.getNumSimulations(), arena.getNumSteps(), entryCell.getLayer(),
 						entryCell.getRow(), entryCell.getCol(), nextCell.getLayer(), nextCell.getRow(),
@@ -152,10 +157,7 @@ public class Ant {
 			currCell = nextCell;
 			row = currCell.getRow();
 			col = currCell.getCol();
-
-//			if (arena.getNumSteps() > 100) {
-				currCell.visit(id);
-//			}
+			currCell.visit(id);
 		}
 	}
 
@@ -164,7 +166,7 @@ public class Ant {
 	 */
 	synchronized private Cell chooseRankedMove() {
 
-		ArrayList<Cell> orderedCells = findNeighbors(currCell);
+		ArrayList<Cell> orderedCells = findRankedNeighbors(currCell);
 		Cell nextCell = currCell;
 
 		// move on to the next ranked cell with probability CHANCE_EXPLORE
@@ -181,10 +183,9 @@ public class Ant {
 	 * Find the neighboring cells that the ant can move into based on its current
 	 * direction. Rank the cells based on the amount of pheromone they have
 	 * 
-	 * @param cell
-	 * @return
+	 * @return list of neighboring cells, ordered by amount of pheromone
 	 */
-	synchronized private ArrayList<Cell> findNeighbors(Cell cell) {
+	synchronized private ArrayList<Cell> findRankedNeighbors(Cell cell) {
 
 		Map<Cell, Integer> cellPher = new LinkedHashMap<Cell, Integer>();
 
@@ -192,18 +193,16 @@ public class Ant {
 		int[] rowSteps = direction.getRowSteps(VISION_RANGE);
 		int[] colSteps = direction.getColSteps(VISION_RANGE);
 
-		// add the bridge as a potential step
+		// add the bridge as a possible step
 		if (currCell.hasBridge()) {
 			Cell firstCell = currCell.getBridge().firstCell(currCell);
-			cellPher.put(firstCell, firstCell.getPheromone()); // + motionGen.nextInt(PHER_NOISE));
+			cellPher.put(firstCell, firstCell.getPheromone());
 		}
 
-		// boolean nestNeighbor = false;
-		// int nest = -1;
+		// for every possible step
 		for (int i = 0; i < rowSteps.length; i++) {
 			int r = row + rowSteps[i];
 			int c = col + colSteps[i];
-
 			Cell neighbor;
 
 			// indicate which layer/bridge the ant is moving in
@@ -215,24 +214,11 @@ public class Ant {
 
 			// add neighboring cells if they're not a wall
 			if (i == 0) {
-				cellPher.put(neighbor, CHANCE_MOVE); // + motionGen.nextInt(PHER_NOISE));
+				cellPher.put(neighbor, CHANCE_MOVE); // staying in place is not affected by pheromones
 			} else if (neighbor.getType() != Cell.WALL) {
-				cellPher.put(neighbor, neighbor.getPheromone()); // + motionGen.nextInt(PHER_NOISE));
-				// System.out.println("getting pher " + neighbor.getPheromone());
+				cellPher.put(neighbor, neighbor.getPheromone() + CHANCE_MOVE);
 			}
-			// if (neighbor.getType() == Cell.NEST) {
-			// nestNeighbor = true;
-			// nest = i;
-			// }
 		}
-
-		// if (nestNeighbor) {
-		// System.out.println(nest + " "+cellPher );
-		// }
-
-		// if (currCell.getType() == Cell.NEST) {
-		// System.out.println(currCell.getPheromone());
-		// }
 
 		// shuffle the map, then order it from smallest to greatest
 		List<Cell> keys = new ArrayList<>(cellPher.keySet());
@@ -247,6 +233,8 @@ public class Ant {
 
 	/**
 	 * Make the next move based on ranked cells
+	 * 
+	 * TODO: make code more elegant by making it more like ranked movement?
 	 */
 	synchronized private Cell chooseWeightedMove() {
 
@@ -258,50 +246,31 @@ public class Ant {
 		// weight (probability of moving to) of each cell
 		int[] cellWeights = new int[numSteps + 1];
 
-		// boolean nestNeighbor = false;
-		// int nest = -1;
+		// for every possible step
 		for (int i = 0; i < rowSteps.length; i++) {
 			int r = row + rowSteps[i];
 			int c = col + colSteps[i];
-
-			Cell tempCell;
+			Cell neighbor;
 
 			// indicate which layer/bridge the ant is moving in
 			if (onBridge) {
-				tempCell = bridgeWorld[r][c];
+				neighbor = bridgeWorld[r][c];
 			} else {
-				tempCell = world[currLayer][r][c];
+				neighbor = world[currLayer][r][c];
 			}
 
-			if (tempCell.getType() != Cell.WALL) {
+			if (neighbor.getType() != Cell.WALL) {
 				if (i == 0) {
-					cellWeights[i] = CHANCE_MOVE; // + tempCell.getPheromone();
-				}
-				// weight of staying in place is not affected by pheromones
-				else {
-					cellWeights[i] = cellWeights[i - 1] + CHANCE_MOVE + tempCell.getPheromone();
+					cellWeights[i] = CHANCE_MOVE; // weight of staying in place is not affected by pheromones
+				} else {
+					cellWeights[i] = cellWeights[i - 1] + CHANCE_MOVE + neighbor.getPheromone();
 				}
 			}
 			// don't move into a wall
 			else {
 				cellWeights[i] = cellWeights[i - 1] + 0;
 			}
-
-			// if (tempCell.getType() == Cell.NEST) {
-			// nestNeighbor = true;
-			// nest = i;
-			// }
-
 		}
-
-		// if (currCell.getType() == Cell.NEST) {
-		// System.out.println(Arrays.toString(cellWeights));
-		// // System.out.println(arena.getNumSteps());
-		// }
-		// //
-		// if (nestNeighbor) {
-		// System.out.println(nest + " " + Arrays.toString(cellWeights));
-		// }
 
 		// add the bridge as a potential step
 		if (currCell.hasBridge()) {
@@ -316,7 +285,7 @@ public class Ant {
 		int move = binarySearch(cellWeights, 0, numSteps + 1, num);
 
 		Cell nextCell;
-
+		// if you get on a bridge
 		if (move == numSteps) {
 			nextCell = currCell.getBridge().firstCell(currCell);
 		} else {
@@ -333,7 +302,8 @@ public class Ant {
 		return nextCell;
 	}
 
-	// find the leftmost mid that target < weights[mid]; eg.target=10,weight[mid]=12
+	// find the leftmost mid such that target < weights[mid]; eg.target=10,
+	// weight[mid]=12
 	private static int binarySearch(int[] weights, int start, int end, int target) {
 		while (start < end) {
 			int mid = start + (end - start) / 2;
@@ -347,8 +317,7 @@ public class Ant {
 	}
 
 	/**
-	 * 
-	 * @return if the ant is on the bridge
+	 * @return if the ant is on a bridge
 	 */
 	synchronized public boolean onBridge() {
 		return onBridge;
@@ -369,17 +338,20 @@ public class Ant {
 	}
 
 	/**
-	 * 
 	 * @return ID of ant
 	 */
 	public int getID() {
 		return id;
 	}
 
+	/**
+	 * @return layer where ant is currently
+	 */
 	synchronized public int getLayer() {
 		return currLayer;
 	}
 
+	//TODO: see if we can use threading with run method for ants
 	//// /**
 	// * Run method for Ant.
 	// */

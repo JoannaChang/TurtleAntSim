@@ -3,8 +3,7 @@ package ants;
 /**
  * Class representing a cell that's a wall. Ants cannot go on it.
  * 
- * @author Joanna
- *
+ * @author Joanna Chang
  */
 
 public class WallCell implements Cell {
@@ -17,9 +16,6 @@ public class WallCell implements Cell {
 
 	/**
 	 * Constructor for a wall cell
-	 * 
-	 * @param row
-	 * @param col
 	 */
 	public WallCell(int layer, int row, int col) {
 		this.row = row;
@@ -43,6 +39,8 @@ public class WallCell implements Cell {
 		return layer;
 	}
 
+	//methods below: N/A for Wall Cell
+	
 	public void addPher() {
 		// do nothing
 	}
@@ -50,19 +48,16 @@ public class WallCell implements Cell {
 	@Override
 	public void visit(int nothing) {
 		// do nothing
-
 	}
 
 	@Override
 	public void leave(int nothing) {
 		// do nothing
-
 	}
 
 	@Override
 	public void pherDecay() {
 		// do nothing
-
 	}
 
 	@Override
@@ -83,16 +78,9 @@ public class WallCell implements Cell {
 		return false;
 	}
 
-	/**
-	 * Reset the cell
-	 */
 	public void reset() {
 		// do nothing
 	}
-
-	// public Bridge getBridge(Cell cell) {
-	// return null;
-	// }
 
 	public void addBridge(Bridge bridge) {
 		// do nothing
@@ -102,10 +90,6 @@ public class WallCell implements Cell {
 		return false;
 	}
 
-	public void updatePher() {
-		// do nothing
-	}
-
 	public Bridge getBridge() {
 		return null;
 	}
@@ -113,9 +97,5 @@ public class WallCell implements Cell {
 	public String toString() {
 		return "Cell: " + row + " " + col;
 	}
-
-	// public boolean crossable(Cell entryCell) {
-	// return false;
-	// }
 
 }

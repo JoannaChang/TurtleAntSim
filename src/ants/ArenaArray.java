@@ -6,6 +6,14 @@ import java.util.List;
 
 import javax.swing.JFrame;
 
+/**
+ * This creates the arrays to represent an arena and the bridges within the
+ * arena. The arena can be wholly customized with the "custom" methods, or it
+ * can be made based on a box grid with the "box" methods.
+ * 
+ * @author Joanna Chang
+ */
+
 public class ArenaArray {
 	// string array to represent the arena
 	private String[][] arena;
@@ -33,9 +41,6 @@ public class ArenaArray {
 
 	/**
 	 * Make custom arena with specified numbers of rows and columns
-	 * 
-	 * @param tRows
-	 * @param tCols
 	 */
 	public void makeCustomArena(int tRows, int tCols) {
 		this.totalRows = tRows + 2;
@@ -44,11 +49,9 @@ public class ArenaArray {
 
 		for (int r = 0; r < totalRows; r++) {
 			for (int c = 0; c < totalCols; c++) {
-
 				// make walls around the arena
 				if (r == 0 || r == totalRows - 1 || c == 0 || c == totalRows - 1) {
 					arena[r][c] = "X";
-
 				}
 				// make everything else empty for now
 				else {
@@ -60,10 +63,6 @@ public class ArenaArray {
 
 	/**
 	 * Add a custom bridge at row, col with the name bridgeName
-	 * 
-	 * @param bridgeName
-	 * @param row
-	 * @param col
 	 */
 	public void addCustomBridge(String bridgeName, int row, int col) {
 		arena[row + 1][col + 1] = "B" + bridgeName;
@@ -71,10 +70,6 @@ public class ArenaArray {
 
 	/**
 	 * Add a custom nest at row, col with the name nestName
-	 * 
-	 * @param nestName
-	 * @param row
-	 * @param col
 	 */
 	public void addCustomNest(String nestName, int row, int col) {
 		arena[row + 1][col + 1] = "N" + nestName;
@@ -82,20 +77,29 @@ public class ArenaArray {
 
 	/**
 	 * Add a custom wall at row, col
-	 * 
-	 * @param row
-	 * @param col
 	 */
 	public void addCustomWall(int row, int col) {
 		arena[row + 1][col + 1] = "X";
 	}
 
 	/**
+	 * Add a custom bridge with a certain length and with the two ends as specified
+	 * cells
+	 */
+	public void addCustomBridge(int row1, int col1, int array1, int row2, int col2, int array2, int length) {
+		// bridge info: length, layer1, row1, col1, layer2, row2, col2
+		bridges.add(length + "," + array1 + "," + row1 + "," + col1 + "," + array2 + "," + row2 + "," + col2);
+	}
+
+	/**
 	 * Make box arena based on specified numbers of box rows and columns
 	 * 
 	 * @param boxRows
+	 *            number of boxes in each row
 	 * @param boxCols
+	 *            number of boxes in each column
 	 * @param size
+	 *            number of cells spanning the length of each box
 	 */
 	public void makeBoxArena(int boxRows, int boxCols, int size) {
 		this.totalRows = boxRows * size + boxRows + 1;
@@ -130,13 +134,8 @@ public class ArenaArray {
 	 * 
 	 * pre: (box2Row >= box1Row) && (box2Col >= box1Col)
 	 * 
-	 * @param box1Row
-	 * @param box1Col
-	 * @param box2Row
-	 * @param box2Col
 	 * @param orientation
 	 *            V(vertical), H(horizontal), or D(diagonal)
-	 * 
 	 */
 	public void addBoxBridge(int box1Row, int box1Col, int box2Row, int box2Col, char orientation, int length) {
 		int rPos, cPos;
@@ -153,9 +152,8 @@ public class ArenaArray {
 			cPos = box2Col * boxSize + box2Col;
 		}
 
-		// make bridges with the length and location of bridge cell, and locations of
-		// the two ends of the bridge
-		// bridge info: length, array1, row1, col1, array2, row2, col2
+		// make bridges with the length and locations of the 2 ends of the bridge
+		// bridge info: length, layer1, row1, col1, layer2, row2, col2
 		if (orientation == 'V') {
 			bridges.add(length + "," + 0 + "," + (rPos - 1) + "," + cPos + "," + 0 + "," + (rPos + 1) + "," + cPos);
 		} else if (orientation == 'H') {
@@ -166,46 +164,9 @@ public class ArenaArray {
 			bridges.add(length + "," + 0 + "," + (rPos + 1) + "," + (cPos - 1) + "," + 0 + "," + (rPos - 1) + ","
 					+ (cPos + 1));
 		}
-		// arena[rPos][cPos] = "B" + length + orientation;
-		// arena[rPos][cPos] = "B";
 
 		arena[rPos][cPos] = "X";
-
 	}
-
-	// bridge info: length, array1, row1, col1, array2, row2, col2
-	public void addCustomBridge(int row1, int col1, int array1, int row2, int col2, int array2, int length) {
-		bridges.add(length + "," + array1 + "," + row1 + "," + col1 + "," + array2 + "," + row2 + "," + col2);
-
-	}
-	// /**
-	// * Make bridge between specified boxes
-	// *
-	// * pre: (box2Row >= box1Row) && (box2Col >= box1Col)
-	// *
-	// * @param box1Row
-	// * @param box1Col
-	// * @param box2Row
-	// * @param box2Col
-	// */
-	// public void addDiagBridge(int box1Row, int box1Col, int box2Row, int box2Col)
-	// {
-	// int rPos, cPos;
-	//
-	// if (box1Row == box2Row) {
-	// rPos = box2Row * boxSize + box2Row + boxSize / 2 + 1;
-	// } else {
-	// rPos = box2Row * boxSize + box2Row;
-	// }
-	//
-	// if (box1Col == box2Col) {
-	// cPos = box2Col * boxSize + box2Col + boxSize / 2 + 1;
-	// } else {
-	// cPos = box2Col * boxSize + box2Col;
-	// }
-	//
-	// arena[rPos][cPos] = "D";
-	// }
 
 	/**
 	 * Make nest in specified box
@@ -213,14 +174,7 @@ public class ArenaArray {
 	public void addBoxNest(int boxRow, int boxCol, String nestName) {
 		int rPos = (boxRow * boxSize) + boxRow + boxSize / 2 + 1;
 		int cPos = (boxCol * boxSize) + boxCol + boxSize / 2 + 1;
-
-//		for (int r = -1;r <= 1; r++) {
-//			for (int c = -1;c <= 1; c++) {	
-//				arena[rPos+r][cPos+c] = "N" + nestName;
-//			}
-//		}
 		arena[rPos][cPos] = "N" + nestName;
-		
 	}
 
 	/**
@@ -280,65 +234,59 @@ public class ArenaArray {
 	 * @param s
 	 */
 	public static void main(String[] s) {
-
 		// make arena array
-		// run this multiple times to make diff layers of arrays
+		// TODO: run this multiple times to make diff layers of arrays
 		ArenaArray a = new ArenaArray(4, 4, 17, false);
 		a.addBoxBridge(0, 0, 0, 1, 'H', 10);
 		a.addBoxBridge(0, 0, 1, 0, 'V', 10);
-		a.addBoxBridge(0, 1, 0, 2, 'H',10);
+		a.addBoxBridge(0, 1, 0, 2, 'H', 10);
 		a.addBoxBridge(0, 2, 0, 3, 'H', 10);
 		a.addBoxBridge(0, 2, 1, 2, 'V', 10);
 		a.addBoxBridge(0, 3, 1, 3, 'V', 10);
 		a.addBoxBridge(1, 0, 2, 0, 'V', 10);
 		a.addBoxBridge(1, 2, 1, 3, 'H', 10);
-		a.addBoxBridge(0, 2, 1, 3, 'D', 10); // diagonal
-		// arenaArray.addBridge(0,3,1,2);
+		a.addBoxBridge(0, 2, 1, 3, 'D', 10); // diagonal bridge
 		a.addBoxBridge(2, 0, 3, 0, 'V', 10);
-//		a.addBoxBridge(2, 1, 3, 1, 'V', 10); //summer
-		a.addBoxBridge(2, 2, 3, 2, 'V', 10); // uninteresting
-		a.addBoxBridge(3, 0, 3, 1, 'H', 10); //uninteresting
-//		a.addBoxBridge(2, 1, 2, 2, 'H', 10); //summer
-		
-		a.addBoxBridge(2, 0, 2, 1, 'H', 10); //uninteresting
-		a.addBoxBridge(2, 0, 3, 1, 'D', 10); //uninteresting
+		a.addBoxBridge(2, 1, 3, 1, 'V', 10);
+		a.addBoxBridge(2, 1, 2, 2, 'H', 10);
 
+		a.addBoxBridge(3, 2, 3, 3, 'H', 10); // Fall only
 
-
-//		a.addBoxBridge(3, 2, 3, 3, 'H', 10); // Fall only
-//
-//		a.addBoxNest(0, 2, "R1"); // Fall only
-//		a.addBoxNest(0, 3, "R2");
-//		a.addBoxNest(1, 2, "R3");
-//		a.addBoxNest(1, 3, "R4");
-//
-//		// Fall D nests
-//		a.addBoxNest(2, 0, "D1");
-//		a.addBoxNest(3, 1, "D2");
-//		a.addBoxNest(2, 2, "D3");
-//		a.addBoxNest(3, 3, "D4");
-		
-//		// // Summer R nests
-//		a.addBoxNest(0, 3, "R1");
-//		a.addBoxNest(1, 2, "R2");
-//		a.addBoxNest(1, 3, "R3");
-//
-//		// Summer D nests
-//		a.addBoxNest(3, 0, "D1");
-//		a.addBoxNest(2, 1, "D2");
-//		a.addBoxNest(3, 2, "D3");
-		
-		//uninteresting
-		a.addBoxNest(0, 2, "R1"); 
+		// Fall R nests
+		a.addBoxNest(0, 2, "R1");
 		a.addBoxNest(0, 3, "R2");
 		a.addBoxNest(1, 2, "R3");
 		a.addBoxNest(1, 3, "R4");
 
-		//uninteresting
+		// Fall D nests
 		a.addBoxNest(2, 0, "D1");
-		a.addBoxNest(3, 0, "D2");
-		a.addBoxNest(2, 1, "D3");
-		a.addBoxNest(3, 1, "D4");
+		a.addBoxNest(3, 1, "D2");
+		a.addBoxNest(2, 2, "D3");
+		a.addBoxNest(3, 3, "D4");
+
+		// // Summer R nests
+		// a.addBoxNest(0, 3, "R1");
+		// a.addBoxNest(1, 2, "R2");
+		// a.addBoxNest(1, 3, "R3");
+		//
+		// // Summer D nests
+		// a.addBoxNest(3, 0, "D1");
+		// a.addBoxNest(2, 1, "D2");
+		// a.addBoxNest(3, 2, "D3");
+
+		// make uninteresting arena: mirrored in both sections
+		// a.addBoxNest(0, 2, "R1");
+		// a.addBoxNest(0, 3, "R2");
+		// a.addBoxNest(1, 2, "R3");
+		// a.addBoxNest(1, 3, "R4");
+		// a.addBoxNest(2, 0, "D1");
+		// a.addBoxNest(3, 0, "D2");
+		// a.addBoxNest(2, 1, "D3");
+		// a.addBoxNest(3, 1, "D4");
+		// a.addBoxBridge(2, 2, 3, 2, 'V', 10);
+		// a.addBoxBridge(3, 0, 3, 1, 'H', 10);
+		// a.addBoxBridge(2, 0, 2, 1, 'H', 10);
+		// a.addBoxBridge(2, 0, 3, 1, 'D', 10);
 
 		System.out.println(a.printPropertiesArray());
 		System.out.println(a.printPropertiesBridges());

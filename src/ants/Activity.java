@@ -1,7 +1,7 @@
 package ants;
 
 /**
- * Stores the data for an activity (bridge crossing or nest enter).
+ * Stores the data for an activity (bridge crossing or nest enter/exit).
  * 
  * @author Joanna
  *
@@ -11,17 +11,14 @@ public class Activity {
 	// ID of ant that performed the activity
 	private int antID;
 
-	// time the activity occurred
+	// when the activity occurred: time step and simulation
 	private int time;
-
-	// whether a nest was entered or if a bridge was crossed
-	// private boolean nestEntered, bridgeCrossed;
+	private int simulation;
 
 	// where the activity occurred
 	private int fromLayer, fromRow, fromCol, toLayer, toRow, toCol;
 
-	private int simulation;
-
+	// type of activity and name of bridge/nest
 	private String activity, name;
 
 	public Activity(int simulation, int time, int fromLayer, int fromRow, int fromCol, int toLayer, int toRow,
@@ -31,7 +28,6 @@ public class Activity {
 		this.antID = antID;
 		this.activity = activity;
 		this.name = name;
-
 		this.fromLayer = fromLayer;
 		this.fromRow = fromRow;
 		this.fromCol = fromCol;

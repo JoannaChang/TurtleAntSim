@@ -1,5 +1,14 @@
 package ants;
 
+/**
+ * This is an bridge accessor cell. An ant can move onto the cell, deposit
+ * pheromone, and go onto a bridge from the cell.
+ * 
+ * NOT IN USE IN CURRENT VERSION
+ * 
+ * @author Joanna Chang
+ */
+
 public class BridgeCell implements Cell {
 
 	// row and column the cell is in
@@ -12,8 +21,8 @@ public class BridgeCell implements Cell {
 	private int pheromone = 0;
 	private int numAnts = 0;
 
-	private int newPher = 0;
-	
+	// private int newPher = 0; //uncomment to only update pher after all ants have
+	// moved once
 
 	// if the cell has been visited by an ant
 	private boolean visited = false;
@@ -24,22 +33,21 @@ public class BridgeCell implements Cell {
 	// the maximum effect pheromones can have on ant movement
 	private int maxPher;
 
-	private Bridge bridge = null;
-	
+	// rate of pheromone decay
 	private double decayRate;
+
+	// keep bridge the cell has access to
+	private Bridge bridge = null;
 
 	/**
 	 * Constructor for a nest cell
-	 * 
-	 * @param row
-	 * @param col
 	 */
 	public BridgeCell(int row, int col, int pherStrength, int maxPher, double decayRate) {
 		this.pherStrength = pherStrength;
 		this.maxPher = maxPher;
 		this.row = row;
 		this.col = col;
-		this.decayRate=decayRate;
+		this.decayRate = decayRate;
 	}
 
 	public int getType() {
@@ -55,38 +63,7 @@ public class BridgeCell implements Cell {
 	}
 
 	public int getLayer() {
-		// do nothing
-		return 0;
-	}
-
-	synchronized public void visit(int antID) {
-//		pheromone = Math.min(pheromone + pherStrength, maxPher);
-
-		newPher = Math.min(newPher + pherStrength, maxPher);
-		numAnts++;
-		visited = true;
-
-	}
-
-	synchronized public void leave(int antID) {
-		numAnts--;
-	}
-
-	public void addPher() {
-		// do nothing
-	}
-
-	synchronized public void pherDecay() {
-		pheromone = newPher;
-		pheromone = Math.max((int) (pheromone - pheromone*decayRate), 0); // was divided by 2
-		if (pheromone <= pherStrength) {
-			visited = false;
-		}
-		newPher = pheromone;
-	}
-
-	synchronized public void updatePher() {
-//		pheromone = newPher;
+		return 0; // do nothing
 	}
 
 	synchronized public int getPheromone() {
@@ -95,6 +72,40 @@ public class BridgeCell implements Cell {
 
 	synchronized public int getAnts() {
 		return numAnts;
+	}
+
+	/**
+	 * Update pheromone when ant visits a cell
+	 */
+	synchronized public void visit(int antID) {
+		pheromone = Math.min(pheromone + pherStrength, maxPher);
+		// newPher = Math.min(newPher + pherStrength, maxPher);
+		numAnts++;
+		visited = true;
+
+	}
+
+	/**
+	 * Note when ant leaves a cell
+	 */
+	synchronized public void leave(int antID) {
+		numAnts--;
+	}
+
+	public void addPher() {
+		// do nothing
+	}
+
+	/**
+	 * Decrease pheromone in cells
+	 */
+	synchronized public void pherDecay() {
+		// pheromone = newPher;
+		pheromone = Math.max((int) (pheromone - pheromone * decayRate), 0);
+		if (pheromone <= pherStrength) {
+			visited = false;
+		}
+		// newPher = pheromone;
 	}
 
 	/**
@@ -111,24 +122,30 @@ public class BridgeCell implements Cell {
 		visited = false;
 		numAnts = 0;
 		pheromone = 0;
+		//newPher = 0;
 	}
 
 	public String toString() {
 		return "Cell: " + row + " " + col;
 	}
 
-	// public Bridge getBridge(Cell cell) {
-	// return null;
-	// }
-
+	/**
+	 * Add bridge that the bridge cell can access
+	 */
 	public void addBridge(Bridge bridge) {
 		this.bridge = bridge;
 	}
 
+	/**
+	 * @return if the cell has access to a bridge
+	 */
 	public boolean hasBridge() {
 		return bridge != null;
 	}
 
+	/**
+	 * @return the bridge the cell has access to
+	 */
 	public Bridge getBridge() {
 		return bridge;
 	}

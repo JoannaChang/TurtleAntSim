@@ -8,29 +8,32 @@ import java.util.Properties;
 
 import javax.swing.JFrame;
 
+/**
+ * This is the controller for turtle ant simulations. It reads in parameters
+ * from a configuration/properties file and starts the simulations according to
+ * those parameters.
+ * 
+ * @author Joanna Chang
+ */
+
 public class SimController {
 
 	public SimController() {
-
 		Properties prop = new Properties();
 		InputStream input = null;
 
 		try {
-
-			input = new FileInputStream("SummerSim4.properties");
-
 			// load a properties file
+			input = new FileInputStream("SummerSim5d.properties");
 			prop.load(input);
 
 			// get arena info
-			String[] layers = prop.getProperty("arena").split(":");
-
-			String[] ar = layers[0].split(";");
-			int col = ar[0].split(",").length;
+			String[] layers = prop.getProperty("arena").split(":"); //layers split by ":"
+			String[] ar = layers[0].split(";"); //rows split by ":"
+			int col = ar[0].split(",").length; //cells split by ","
 			int row = ar.length;
 
 			String[][][] arenaArray = new String[layers.length][row][col];
-
 			for (int i = 0; i < layers.length; i++) {
 				String[] layer = layers[i].split(";");
 				String[][] layerArray = new String[row][col];
@@ -39,14 +42,6 @@ public class SimController {
 				}
 				arenaArray[i] = layerArray;
 			}
-
-			// String[] ar = prop.getProperty("array").split(";");
-			// int col = ar[0].split(",").length;
-			// int row = ar.length;
-			// String[][] array = new String[row][col];
-			// for (int i = 0; i < row; i++) {
-			// array[i] = ar[i].split(",");
-			// }
 
 			// get bridge info
 			String[] b = prop.getProperty("bridges").split(";");
@@ -65,7 +60,7 @@ public class SimController {
 			int startRow = Integer.parseInt(prop.getProperty("startRow"));
 			int startCol = Integer.parseInt(prop.getProperty("startCol"));
 			int boxSize = Integer.parseInt(prop.getProperty("boxSize"));
-			
+
 			int[] psValues = Arrays.stream(prop.getProperty("pherStrength").split(",")).mapToInt(Integer::parseInt)
 					.toArray();
 			int[] mpValues = Arrays.stream(prop.getProperty("maxPher").split(",")).mapToInt(Integer::parseInt)
@@ -73,24 +68,21 @@ public class SimController {
 			int[] pfValues = Arrays.stream(prop.getProperty("pherFactor").split(",")).mapToInt(Integer::parseInt)
 					.toArray();
 
+			//run simulations
 			for (int pf = pfValues[0]; pf <= pfValues[1]; pf = pf + pfValues[2]) {
 				for (int ps = psValues[0]; ps <= psValues[1]; ps = ps + psValues[2]) {
 					for (int mp = mpValues[0]; mp <= mpValues[1]; mp = mp + mpValues[2]) {
-
 						JFrame f = new JFrame("Ant Simulation");
-
 						Arena a = new Arena(arenaArray, bridges, nestFile, activityFile, totalSteps, totalSimulations,
 								numAnts, startRow, startCol, boxSize, ps, mp, pf);
 						f.add(a);
 						f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 						f.setSize(row * Arena.CELLSIZE + 350, col * Arena.CELLSIZE + 350);
 						f.setVisible(true);
-
 						a.simulate();
 					}
 				}
 			}
-
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		} finally {
@@ -105,9 +97,7 @@ public class SimController {
 	}
 
 	/**
-	 * Create frame and Arena panel in the frame.
-	 * 
-	 * @param s
+	 * Run SimController
 	 */
 	public static void main(String[] s) {
 

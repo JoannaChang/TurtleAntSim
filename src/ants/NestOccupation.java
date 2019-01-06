@@ -3,7 +3,7 @@ package ants;
 /**
  * Stores the data for nest occupation
  * 
- * @author Joanna
+ * @author Joanna Chang
  *
  */
 public class NestOccupation {
@@ -17,6 +17,7 @@ public class NestOccupation {
 	// number of simulations that occurred
 	private int numSimulation;
 
+	// pheromone factor and amount of pheromone in nest
 	private int pherFactor, pher;
 
 	public NestOccupation(String nestName, int pher, int numAnts, int numSimulation, int pherFactor) {
@@ -25,7 +26,6 @@ public class NestOccupation {
 		this.nestName = nestName;
 		this.numSimulation = numSimulation;
 		this.pherFactor = pherFactor;
-		
 	}
 
 	public int getAnts() {

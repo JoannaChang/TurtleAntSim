@@ -1,5 +1,10 @@
 package ants;
 
+/**
+ * Not used in current version
+ * @author Joanna
+ *
+ */
 public class Tuple { 
 	  public final int x; 
 	  public final int y; 

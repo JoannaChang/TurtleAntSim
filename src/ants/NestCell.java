@@ -16,16 +16,14 @@ public class NestCell implements Cell {
 	// name of the nest
 	private String name;
 
+	// where nest cell exists
+	private Arena arena;
+
 	// keep track of pheromone and ants in nest
-	private static final int BASEPHER = 8;
 	private int pheromone = 8;
-	private int newPher = 0;
-
 	private int numAnts = 0;
-
-
-	// if the cell has been visited by an ant
-	private boolean visited = false;
+	// private int newPher = 0; //uncomment to update pheromone after all the ants
+	// have moved in a time step
 
 	// how much pheromone each ant adds to cell with visit
 	private int pherStrength;
@@ -33,25 +31,21 @@ public class NestCell implements Cell {
 	// the maximum effect pheromones can have on ant movement
 	private int maxPher;
 
-//	// amount of pheromone that cuts chance of leaving a nest in half
-//	private int pherFactor;
-//
-//	// chance that ant will leave a nest without pheromones
-//	private static final int CHANCE_LEAVE = 500; // should be 1/2
-//
-//	private Random exitGen = new Random();
+	// rate of pheromone decay
+	private double decayRate;
 
+	// if the cell has been visited by an ant
+	private boolean visited = false;
+
+	// list to add nest enters/exits
 	private List<Activity> activity;
 
-	private Arena arena;
-	
-	private double decayRate = 0.05;
+	// base pheromone represents greater likelihood an ant will explore a nest over
+	// an empty space
+	private static final int BASEPHER = 8;
 
 	/**
 	 * Constructor for a nest cell
-	 * 
-	 * @param row
-	 * @param col
 	 */
 	public NestCell(int layer, int row, int col, int pherStrength, int maxPher, String name, List<Activity> activity,
 			Arena arena, double decayRate) {
@@ -63,7 +57,7 @@ public class NestCell implements Cell {
 		this.activity = activity;
 		this.arena = arena;
 		this.layer = layer;
-//		this.decayRate = decayRate;
+		this.decayRate = decayRate;
 	}
 
 	public int getType() {
@@ -81,42 +75,7 @@ public class NestCell implements Cell {
 	public int getLayer() {
 		return layer;
 	}
-
-	synchronized public void visit(int antID) {
-		pheromone = Math.min(pheromone + pherStrength, maxPher);
-
-//		newPher = Math.min(newPher + pherStrength, maxPher);
-		
-		numAnts++;
-		// System.out.println("visit " + numAnts);
-
-		visited = true;
-		activity.add(new Activity(arena.getNumSimulations(), arena.getNumSteps(), layer, row, col, -1, -1, -1, antID,
-				"NestEntered", name));
-	}
-
-	// TODO: see if this should be synchronized
-	synchronized public void leave(int antID) {
-		numAnts--;
-		// System.out.println("leave " + numAnts);
-
-		activity.add(new Activity(arena.getNumSimulations(), arena.getNumSteps(), layer, row, col, -1, -1, -1, antID,
-				"NestExited", name));
-	}
-
-	synchronized public void pherDecay() {
-//		pheromone = newPher;
-		pheromone = Math.max((int) (pheromone - pheromone*decayRate), BASEPHER); // was divided by 2
-		if (pheromone <= BASEPHER) {
-			visited = false;
-		}
-//		newPher = pheromone;
-	}
-
-	synchronized public void updatePher() {
-//		pheromone = newPher;
-	}
-
+	
 	synchronized public int getPheromone() {
 		return pheromone;
 	}
@@ -125,10 +84,48 @@ public class NestCell implements Cell {
 		return numAnts;
 	}
 
-	synchronized public void addPher() {
-		pheromone = Math.min(pheromone + pherStrength, maxPher);
+	/**
+	 * Update pheromone and record activity when ant visits a nest
+	 */
+	synchronized public void visit(int antID) {
+		pheromone = Math.min(pheromone + pherStrength, maxPher); // comment to only update pher after one time step
+		// newPher = Math.min(newPher + pherStrength, maxPher); //uncomment to only
+		// update pher after one time step
+		numAnts++;
+		visited = true;
+		activity.add(new Activity(arena.getNumSimulations(), arena.getNumSteps(), layer, row, col, -1, -1, -1, antID,
+				"NestEntered", name));
+	}
 
-//		newPher = Math.min(newPher + pherStrength, maxPher);
+	/**
+	 * Update number of ants and record activity when ant exits a nest 
+	 * 
+	 * TODO: see if this should be synchronized
+	 */
+	synchronized public void leave(int antID) {
+		numAnts--;
+		activity.add(new Activity(arena.getNumSimulations(), arena.getNumSteps(), layer, row, col, -1, -1, -1, antID,
+				"NestExited", name));
+	}
+
+	/**
+	 * Decrease amount of pheromone in cell
+	 */
+	synchronized public void pherDecay() {
+		// pheromone = newPher;
+		pheromone = Math.max((int) (pheromone - pheromone * decayRate), BASEPHER); 
+		if (pheromone <= BASEPHER) {
+			visited = false;
+		}
+		// newPher = pheromone;
+	}
+
+	/**
+	 * Add pheromone (without increasing number of ants)
+	 */
+	synchronized public void addPher() {
+		pheromone = Math.min(pheromone + pherStrength, maxPher); 
+		// newPher = Math.min(newPher + pherStrength, maxPher);
 		visited = true;
 	}
 
@@ -146,9 +143,14 @@ public class NestCell implements Cell {
 		visited = false;
 		numAnts = 0;
 		pheromone = BASEPHER;
-		newPher = BASEPHER;
+//		newPher = BASEPHER;
 	}
 
+	public String toString() {
+		return "Cell: " + row + " " + col;
+	}
+
+	// bridge methods: N/A
 	public void addBridge(Bridge bridge) {
 		// do nothing
 	}
@@ -159,10 +161,6 @@ public class NestCell implements Cell {
 
 	public Bridge getBridge() {
 		return null;
-	}
-
-	public String toString() {
-		return "Cell: " + row + " " + col;
 	}
 
 }
