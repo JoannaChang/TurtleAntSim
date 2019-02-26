@@ -144,7 +144,7 @@ public class Ant {
 
 		// get on the bridge if you're not on already
 		else if (nextCell.getType() == Cell.BRIDGE && !onBridge) {
-			System.out.println("on bridge");
+//			System.out.println("on bridge");
 			currBridge = currCell.getBridge();
 			bridgeWorld = currBridge.getBridgeWorld();
 

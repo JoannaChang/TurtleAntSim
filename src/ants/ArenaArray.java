@@ -158,11 +158,17 @@ public class ArenaArray {
 			bridges.add(length + "," + 0 + "," + (rPos - 1) + "," + cPos + "," + 0 + "," + (rPos + 1) + "," + cPos);
 		} else if (orientation == 'H') {
 			bridges.add(length + "," + 0 + "," + rPos + "," + (cPos - 1) + "," + 0 + "," + rPos + "," + (cPos + 1));
+//		} else if (orientation == 'D') {
+//			bridges.add(length + "," + 0 + "," + (rPos + 1) + "," + (cPos + 1) + "," + 0 + "," + (rPos - 1) + ","
+//					+ (cPos - 1));
+//			bridges.add(length + "," + 0 + "," + (rPos + 1) + "," + (cPos - 1) + "," + 0 + "," + (rPos - 1) + ","
+//					+ (cPos + 1));
+//		}
 		} else if (orientation == 'D') {
-			bridges.add(length + "," + 0 + "," + (rPos + 1) + "," + (cPos + 1) + "," + 0 + "," + (rPos - 1) + ","
-					+ (cPos - 1));
-			bridges.add(length + "," + 0 + "," + (rPos + 1) + "," + (cPos - 1) + "," + 0 + "," + (rPos - 1) + ","
-					+ (cPos + 1));
+				bridges.add(length + "," + 0 + "," + (rPos + 2) + "," + (cPos + 2) + "," + 0 + "," + (rPos - 2) + ","
+						+ (cPos - 2));
+				bridges.add(length + "," + 0 + "," + (rPos + 2) + "," + (cPos - 2) + "," + 0 + "," + (rPos - 2) + ","
+						+ (cPos + 2));
 		}
 
 		arena[rPos][cPos] = "X";
@@ -249,6 +255,9 @@ public class ArenaArray {
 		a.addBoxBridge(2, 0, 3, 0, 'V', 10);
 		a.addBoxBridge(2, 1, 3, 1, 'V', 10);
 		a.addBoxBridge(2, 1, 2, 2, 'H', 10);
+		a.addBoxBridge(3, 0, 3, 1, 'H', 10);
+		a.addBoxBridge(2, 2, 3, 2, 'V', 10);
+
 
 		a.addBoxBridge(3, 2, 3, 3, 'H', 10); // Fall only
 
@@ -265,14 +274,14 @@ public class ArenaArray {
 		a.addBoxNest(3, 3, "D4");
 
 		// // Summer R nests
-		// a.addBoxNest(0, 3, "R1");
-		// a.addBoxNest(1, 2, "R2");
-		// a.addBoxNest(1, 3, "R3");
-		//
-		// // Summer D nests
-		// a.addBoxNest(3, 0, "D1");
-		// a.addBoxNest(2, 1, "D2");
-		// a.addBoxNest(3, 2, "D3");
+//		 a.addBoxNest(0, 3, "R1");
+//		 a.addBoxNest(1, 2, "R2");
+//		 a.addBoxNest(1, 3, "R3");
+//		
+//		 // Summer D nests
+//		 a.addBoxNest(3, 0, "D1");
+//		 a.addBoxNest(2, 1, "D2");
+//		 a.addBoxNest(3, 2, "D3");
 
 		// make uninteresting arena: mirrored in both sections
 		// a.addBoxNest(0, 2, "R1");

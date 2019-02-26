@@ -24,7 +24,7 @@ public class SimController {
 
 		try {
 			// load a properties file
-			input = new FileInputStream("SummerSim5d.properties");
+			input = new FileInputStream("FallSims5e.properties");
 			prop.load(input);
 
 			// get arena info
@@ -100,7 +100,6 @@ public class SimController {
 	 * Run SimController
 	 */
 	public static void main(String[] s) {
-
 		SimController sc = new SimController();
 	}
 }
