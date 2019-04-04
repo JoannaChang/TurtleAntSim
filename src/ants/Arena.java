@@ -202,9 +202,9 @@ public class Arena extends JPanel {
 			
 			// TODO: check if different here; originally in paint method
 			// decrease the pheromones of the bridges
-			for (Bridge bridge : bridges) {
-				bridge.pherDecay();
-			}
+//			for (Bridge bridge : bridges) {
+//				bridge.pherDecay();
+//			}
 
 			repaint();
 
@@ -222,7 +222,13 @@ public class Arena extends JPanel {
 					nestOccupation.add(new NestOccupation(theNests.get(nest), nest.getPheromone(), nest.getAnts(),
 							numSimulations, pherFactor));
 				}
-
+				
+////				//delete later
+//				for (Bridge bridge: bridges) {
+//					System.out.println(bridge.getBridgeWorld()[1][1].getPheromone());
+//				}
+////				//delete later
+				
 				System.out.println("Simulation: " + numSimulations);
 				numSimulations++;
 
@@ -271,7 +277,7 @@ public class Arena extends JPanel {
 						} else if (theArena[layer][row][col].hasBridge()) {
 							Rectangle2D.Double c;
 							c = new Rectangle2D.Double(col * CELLSIZE, row * CELLSIZE, CELLSIZE, CELLSIZE);
-							g2.setPaint(Color.DARK_GRAY);
+							g2.setPaint(Color.MAGENTA);
 							g2.fill(c);
 						}
 						//TODO: add synchronization?
@@ -302,9 +308,9 @@ public class Arena extends JPanel {
 
 			//TODO: check if there was an issue of putting this here
 //			// decrease the pheromones of the bridges
-//			for (Bridge bridge : bridges) {
-//				bridge.pherDecay();
-//			}
+			for (Bridge bridge : bridges) {
+				bridge.pherDecay();
+			}
 			
 			// graphics
 			// paint ants red

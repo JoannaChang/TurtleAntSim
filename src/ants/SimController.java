@@ -24,13 +24,14 @@ public class SimController {
 
 		try {
 			// load a properties file
-			input = new FileInputStream("FallSims5e.properties");
+			input = new FileInputStream("FallSim7c.properties");
 			prop.load(input);
 
 			// get arena info
 			String[] layers = prop.getProperty("arena").split(":"); //layers split by ":"
 			String[] ar = layers[0].split(";"); //rows split by ":"
 			int col = ar[0].split(",").length; //cells split by ","
+			
 			int row = ar.length;
 
 			String[][][] arenaArray = new String[layers.length][row][col];

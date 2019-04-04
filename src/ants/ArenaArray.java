@@ -247,11 +247,11 @@ public class ArenaArray {
 		a.addBoxBridge(0, 0, 1, 0, 'V', 10);
 		a.addBoxBridge(0, 1, 0, 2, 'H', 10);
 		a.addBoxBridge(0, 2, 0, 3, 'H', 10);
-		a.addBoxBridge(0, 2, 1, 2, 'V', 10);
+//		a.addBoxBridge(0, 2, 1, 2, 'V', 10);
 		a.addBoxBridge(0, 3, 1, 3, 'V', 10);
 		a.addBoxBridge(1, 0, 2, 0, 'V', 10);
 		a.addBoxBridge(1, 2, 1, 3, 'H', 10);
-		a.addBoxBridge(0, 2, 1, 3, 'D', 10); // diagonal bridge
+//		a.addBoxBridge(0, 2, 1, 3, 'D', 10); // diagonal bridge
 		a.addBoxBridge(2, 0, 3, 0, 'V', 10);
 		a.addBoxBridge(2, 1, 3, 1, 'V', 10);
 		a.addBoxBridge(2, 1, 2, 2, 'H', 10);
