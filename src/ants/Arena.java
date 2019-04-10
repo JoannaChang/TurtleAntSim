@@ -185,7 +185,7 @@ public class Arena extends JPanel {
 			// move each ant
 			Collections.shuffle(ants);
 			for (Ant ant : ants) {
-				ant.move();
+//				ant.move();
 				// repaint(); //uncomment to repaint after each ant moves
 			}
 

@@ -24,7 +24,7 @@ public class SimController {
 
 		try {
 			// load a properties file
-			input = new FileInputStream("FallSim7c.properties");
+			input = new FileInputStream("FallSim9a.properties");
 			prop.load(input);
 
 			// get arena info
