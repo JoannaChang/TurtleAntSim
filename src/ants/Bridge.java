@@ -82,7 +82,9 @@ public class Bridge {
 	 */
 	synchronized public void pherDecay() {
 		for (int i = 1; i < length + 1; i++) {
-			theBridge[1][i].pherDecay();
+//			if(theBridge [1][i].visited()) { //added 4/17 //taken out 4/18
+				theBridge[1][i].pherDecay();
+//			}
 		}
 	}
 
@@ -95,5 +97,4 @@ public class Bridge {
 			theBridge[1][i].reset();
 		}
 	}
-
 }

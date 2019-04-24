@@ -15,7 +15,7 @@ public interface Cell {
 	public int getCol();
 	public int getLayer();
 	public int getType();
-	public int getPheromone();
+	public double getPheromone(); // was int
 	public int getAnts();
 
 	public void visit(int antID);

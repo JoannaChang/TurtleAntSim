@@ -18,11 +18,12 @@ public class NestOccupation {
 	private int numSimulation;
 
 	// pheromone factor and amount of pheromone in nest
-	private int pherFactor, pher;
+	private int pherFactor;
+	private double pher; //was int
 
-	public NestOccupation(String nestName, int pher, int numAnts, int numSimulation, int pherFactor) {
+	public NestOccupation(String nestName, double pher, int numAnts, int numSimulation, int pherFactor) {
 		this.numAnts = numAnts;
-		this.pher = pher;
+		this.pher = pher; // was int
 		this.nestName = nestName;
 		this.numSimulation = numSimulation;
 		this.pherFactor = pherFactor;
@@ -44,7 +45,7 @@ public class NestOccupation {
 		return numSimulation;
 	}
 
-	public int getPher() {
+	public double getPher() { // was int
 		return pher;
 	}
 }

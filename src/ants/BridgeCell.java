@@ -18,7 +18,7 @@ public class BridgeCell implements Cell {
 	private int type = Cell.BRIDGE;
 
 	// keep track of pheromone and ants in nest
-	private int pheromone = 0;
+	private double pheromone = 0; //was int
 	private int numAnts = 0;
 
 	// private int newPher = 0; //uncomment to only update pher after all ants have
@@ -66,7 +66,7 @@ public class BridgeCell implements Cell {
 		return 0; // do nothing
 	}
 
-	synchronized public int getPheromone() {
+	synchronized public double getPheromone() {
 		return pheromone;
 	}
 
@@ -101,8 +101,11 @@ public class BridgeCell implements Cell {
 	 */
 	synchronized public void pherDecay() {
 		// pheromone = newPher;
-		pheromone = Math.max((int) (pheromone - pheromone * decayRate), 0);
+//		pheromone = Math.max((int) (pheromone - pheromone * decayRate), 0);
+
+		pheromone = Math.max((pheromone - pheromone * decayRate), 0); // added this
 		if (pheromone <= pherStrength) {
+//		if (pheromone < pherStrength) {//added 4/17
 			visited = false;
 		}
 		// newPher = pheromone;

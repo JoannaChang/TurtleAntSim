@@ -20,7 +20,7 @@ public class NestCell implements Cell {
 	private Arena arena;
 
 	// keep track of pheromone and ants in nest
-	private int pheromone = 8;
+	private double pheromone = 8; //was double
 	private int numAnts = 0;
 	// private int newPher = 0; //uncomment to update pheromone after all the ants
 	// have moved in a time step
@@ -76,7 +76,7 @@ public class NestCell implements Cell {
 		return layer;
 	}
 	
-	synchronized public int getPheromone() {
+	synchronized public double getPheromone() {
 		return pheromone;
 	}
 
@@ -113,8 +113,11 @@ public class NestCell implements Cell {
 	 */
 	synchronized public void pherDecay() {
 		// pheromone = newPher;
-		pheromone = Math.max((int) (pheromone - pheromone * decayRate), BASEPHER); 
-		if (pheromone <= BASEPHER) {
+//		pheromone = Math.max((int) (pheromone - pheromone * decayRate), BASEPHER);
+		pheromone = Math.max((pheromone - pheromone * decayRate), BASEPHER); // added this
+		if (pheromone <= BASEPHER) { 
+//		if (pheromone < BASEPHER) {//added 4/17
+
 			visited = false;
 		}
 		// newPher = pheromone;

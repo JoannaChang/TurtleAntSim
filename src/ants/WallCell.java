@@ -61,7 +61,7 @@ public class WallCell implements Cell {
 	}
 
 	@Override
-	public int getPheromone() {
+	public double getPheromone() { //was int
 		// do nothing
 		return 0;
 	}

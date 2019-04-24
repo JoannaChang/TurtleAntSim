@@ -188,7 +188,9 @@ public class Ant {
 	 */
 	synchronized private ArrayList<Cell> findRankedNeighbors(Cell cell) {
 
-		Map<Cell, Integer> cellPher = new LinkedHashMap<Cell, Integer>();
+//		Map<Cell, Integer> cellPher = new LinkedHashMap<Cell, Integer>();
+		Map<Cell, Double> cellPher = new LinkedHashMap<Cell, Double>();
+
 
 		// possible steps based on the direction
 		int[] rowSteps = direction.getRowSteps(VISION_RANGE);
@@ -215,7 +217,7 @@ public class Ant {
 
 			// add neighboring cells if they're not a wall
 			if (i == 0) {
-				cellPher.put(neighbor, CHANCE_MOVE); // staying in place is not affected by pheromones
+				cellPher.put(neighbor, (double)CHANCE_MOVE); // staying in place is not affected by pheromones // was int
 			} else if (neighbor.getType() != Cell.WALL) {
 				cellPher.put(neighbor, neighbor.getPheromone() + CHANCE_MOVE);
 			}
@@ -224,9 +226,13 @@ public class Ant {
 		// shuffle the map, then order it from smallest to greatest
 		List<Cell> keys = new ArrayList<>(cellPher.keySet());
 		Collections.shuffle(keys);
-		Map<Cell, Integer> shuffleCells = new LinkedHashMap<>();
+		
+		Map<Cell, Double> shuffleCells = new LinkedHashMap<>();
+//		Map<Cell, Integer> shuffleCells = new LinkedHashMap<>();
 		keys.forEach(k -> shuffleCells.put(k, cellPher.get(k)));
-		Map<Cell, Integer> orderedCells = shuffleCells.entrySet().stream().sorted(Entry.comparingByValue())
+//		Map<Cell, Integer> orderedCells = shuffleCells.entrySet().stream().sorted(Entry.comparingByValue())
+//				.collect(Collectors.toMap(Entry::getKey, Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+		Map<Cell, Double> orderedCells = shuffleCells.entrySet().stream().sorted(Entry.comparingByValue())
 				.collect(Collectors.toMap(Entry::getKey, Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 
 		return new ArrayList<Cell>(orderedCells.keySet());
@@ -245,7 +251,7 @@ public class Ant {
 		int numSteps = rowSteps.length;
 
 		// weight (probability of moving to) of each cell
-		int[] cellWeights = new int[numSteps + 1];
+		double[] cellWeights = new double[numSteps + 1]; //was int
 
 		// for every possible step
 		for (int i = 0; i < rowSteps.length; i++) {
@@ -282,7 +288,9 @@ public class Ant {
 		}
 
 		// randomly generate number and find move that corresponds with number
-		int num = motionGen.nextInt(cellWeights[numSteps] - 1) + 1;
+//		int num = motionGen.nextInt(cellWeights[numSteps] - 1) + 1;
+
+		double num = motionGen.nextDouble()*cellWeights[numSteps];
 		int move = binarySearch(cellWeights, 0, numSteps + 1, num);
 
 		Cell nextCell;
@@ -305,7 +313,7 @@ public class Ant {
 
 	// find the leftmost mid such that target < weights[mid]; eg.target=10,
 	// weight[mid]=12
-	private static int binarySearch(int[] weights, int start, int end, int target) {
+	private static int binarySearch(double[] weights, int start, int end, double target) { //was int for weights and target
 		while (start < end) {
 			int mid = start + (end - start) / 2;
 			if (target <= weights[mid]) {
