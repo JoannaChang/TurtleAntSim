@@ -15,7 +15,7 @@ import javax.swing.JFrame;
  * 
  * @author Joanna Chang
  */
-
+//need summer 10a
 public class SimController {
 
 	public SimController() {
@@ -24,7 +24,7 @@ public class SimController {
 
 		try {
 			// load a properties file
-			input = new FileInputStream("FallSim7c.properties");
+			input = new FileInputStream("SummerSim7c.properties");
 			prop.load(input);
 
 			// get arena info

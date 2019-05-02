@@ -37,6 +37,7 @@ public class Ant {
 
 	// direction that the ant is facing
 	private Direction direction;
+	private int prevXDir, prevYDir;
 
 	// keep track of bridge crossings and nest enters/exits
 	private List<Activity> activity;
@@ -140,6 +141,10 @@ public class Ant {
 			}
 			currLayer = nextCell.getLayer();
 			onBridge = false;
+			
+			//added 5/2
+			direction.setDir(prevXDir, prevYDir);
+			//
 		}
 
 		// get on the bridge if you're not on already
@@ -150,6 +155,18 @@ public class Ant {
 
 			entryCell = currCell;
 			onBridge = true;
+			
+			//added 5.2
+			prevXDir = direction.getX();
+			prevYDir = direction.getY();
+			
+			if (currBridge.endOne(nextCell)){
+				direction.setDir(1, 0);
+			}
+			else {
+				direction.setDir(0, 1);
+			}
+			//
 		}
 
 		// make the move
@@ -199,7 +216,7 @@ public class Ant {
 		// add the bridge as a possible step
 		if (currCell.hasBridge()) {
 			Cell firstCell = currCell.getBridge().firstCell(currCell);
-			cellPher.put(firstCell, firstCell.getPheromone());
+			cellPher.put(firstCell, firstCell.getPheromone() + CHANCE_MOVE); //added + CHANCE_MOVE 5/2
 		}
 
 		// for every possible step

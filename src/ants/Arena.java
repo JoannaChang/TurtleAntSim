@@ -82,7 +82,7 @@ public class Arena extends JPanel {
 	private String activityFile;
 
 	// rate of pheromone decay
-	private double decayRate = 0.04; // was 0.05
+	private double decayRate = 0.05; // was 0.05
 
 	/**
 	 * Constructor for the arena
@@ -202,7 +202,8 @@ public class Arena extends JPanel {
 			
 			// TODO: check if different here; originally in paint method
 			// decrease the pheromones of the bridges
-			for (Bridge bridge : bridges) {
+//			Collections.shuffle(bridges);
+			for (Bridge bridge : bridges){
 				bridge.pherDecay();
 			}
 

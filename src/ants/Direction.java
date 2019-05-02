@@ -146,7 +146,13 @@ public class Direction {
 	public int getY() {
 		return yDir;
 	}
-
+	
+	//added 5/2/19
+	public void setDir(int xDir,int yDir) {
+		direction = Integer.toString(xDir) + "," + Integer.toString(yDir);
+	}
+	//
+	
 	/**
 	 * Turn randomly within a certain range of degrees
 	 * 
