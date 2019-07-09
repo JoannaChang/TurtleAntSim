@@ -4,7 +4,7 @@ package ants;
  * This is an bridge accessor cell. An ant can move onto the cell, deposit
  * pheromone, and go onto a bridge from the cell.
  * 
- * NOT IN USE IN CURRENT VERSION
+ * USED IN LATEST/FINAL VERSION (ignore comment from previous commit)
  * 
  * @author Joanna Chang
  */
@@ -18,7 +18,7 @@ public class BridgeCell implements Cell {
 	private int type = Cell.BRIDGE;
 
 	// keep track of pheromone and ants in nest
-	private double pheromone = 0; //was int
+	private double pheromone = 0; // was int
 	private int numAnts = 0;
 
 	// private int newPher = 0; //uncomment to only update pher after all ants have
@@ -66,16 +66,6 @@ public class BridgeCell implements Cell {
 		return 0; // do nothing
 	}
 
-<<<<<<< HEAD
-	synchronized public int getPheromone() {
-		return pheromone;
-	}
-
-	synchronized public int getAnts() {
-		return numAnts;
-	}
-
-=======
 	synchronized public double getPheromone() {
 		return pheromone;
 	}
@@ -84,7 +74,6 @@ public class BridgeCell implements Cell {
 		return numAnts;
 	}
 
->>>>>>> d813a055bec855a0f3c04b6473c02220e9e5a0b4
 	/**
 	 * Update pheromone when ant visits a cell
 	 */
@@ -112,15 +101,10 @@ public class BridgeCell implements Cell {
 	 */
 	synchronized public void pherDecay() {
 		// pheromone = newPher;
-<<<<<<< HEAD
-		pheromone = Math.max((int) (pheromone - pheromone * decayRate), 0);
-=======
-//		pheromone = Math.max((int) (pheromone - pheromone * decayRate), 0);
+		// pheromone = Math.max((int) (pheromone - pheromone * decayRate), 0);
 
 		pheromone = Math.max((pheromone - pheromone * decayRate), 0); // added this
->>>>>>> d813a055bec855a0f3c04b6473c02220e9e5a0b4
 		if (pheromone <= pherStrength) {
-//		if (pheromone < pherStrength) {//added 4/17
 			visited = false;
 		}
 		// newPher = pheromone;
@@ -140,7 +124,7 @@ public class BridgeCell implements Cell {
 		visited = false;
 		numAnts = 0;
 		pheromone = 0;
-		//newPher = 0;
+		// newPher = 0;
 	}
 
 	public String toString() {

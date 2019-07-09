@@ -37,10 +37,7 @@ public class Ant {
 
 	// direction that the ant is facing
 	private Direction direction;
-<<<<<<< HEAD
-=======
 	private int prevXDir, prevYDir;
->>>>>>> d813a055bec855a0f3c04b6473c02220e9e5a0b4
 
 	// keep track of bridge crossings and nest enters/exits
 	private List<Activity> activity;
@@ -145,9 +142,7 @@ public class Ant {
 			currLayer = nextCell.getLayer();
 			onBridge = false;
 			
-			//added 5/2
 			direction.setDir(prevXDir, prevYDir);
-			//
 		}
 
 		// get on the bridge if you're not on already
@@ -159,7 +154,6 @@ public class Ant {
 			entryCell = currCell;
 			onBridge = true;
 			
-			//added 5.2
 			prevXDir = direction.getX();
 			prevYDir = direction.getY();
 			
@@ -169,7 +163,6 @@ public class Ant {
 			else {
 				direction.setDir(0, 1);
 			}
-			//
 		}
 
 		// make the move
@@ -207,12 +200,9 @@ public class Ant {
 	 * @return list of neighboring cells, ordered by amount of pheromone
 	 */
 	synchronized private ArrayList<Cell> findRankedNeighbors(Cell cell) {
-<<<<<<< HEAD
-=======
 
 //		Map<Cell, Integer> cellPher = new LinkedHashMap<Cell, Integer>();
 		Map<Cell, Double> cellPher = new LinkedHashMap<Cell, Double>();
->>>>>>> d813a055bec855a0f3c04b6473c02220e9e5a0b4
 
 
 		// possible steps based on the direction
@@ -222,11 +212,7 @@ public class Ant {
 		// add the bridge as a possible step
 		if (currCell.hasBridge()) {
 			Cell firstCell = currCell.getBridge().firstCell(currCell);
-<<<<<<< HEAD
-			cellPher.put(firstCell, firstCell.getPheromone());
-=======
 			cellPher.put(firstCell, firstCell.getPheromone() + CHANCE_MOVE); //added + CHANCE_MOVE 5/2
->>>>>>> d813a055bec855a0f3c04b6473c02220e9e5a0b4
 		}
 
 		// for every possible step
@@ -244,11 +230,7 @@ public class Ant {
 
 			// add neighboring cells if they're not a wall
 			if (i == 0) {
-<<<<<<< HEAD
-				cellPher.put(neighbor, CHANCE_MOVE); // staying in place is not affected by pheromones
-=======
 				cellPher.put(neighbor, (double)CHANCE_MOVE); // staying in place is not affected by pheromones // was int
->>>>>>> d813a055bec855a0f3c04b6473c02220e9e5a0b4
 			} else if (neighbor.getType() != Cell.WALL) {
 				cellPher.put(neighbor, neighbor.getPheromone() + CHANCE_MOVE);
 			}
@@ -259,10 +241,7 @@ public class Ant {
 		Collections.shuffle(keys);
 		
 		Map<Cell, Double> shuffleCells = new LinkedHashMap<>();
-//		Map<Cell, Integer> shuffleCells = new LinkedHashMap<>();
 		keys.forEach(k -> shuffleCells.put(k, cellPher.get(k)));
-//		Map<Cell, Integer> orderedCells = shuffleCells.entrySet().stream().sorted(Entry.comparingByValue())
-//				.collect(Collectors.toMap(Entry::getKey, Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 		Map<Cell, Double> orderedCells = shuffleCells.entrySet().stream().sorted(Entry.comparingByValue())
 				.collect(Collectors.toMap(Entry::getKey, Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 
@@ -319,8 +298,6 @@ public class Ant {
 		}
 
 		// randomly generate number and find move that corresponds with number
-//		int num = motionGen.nextInt(cellWeights[numSteps] - 1) + 1;
-
 		double num = motionGen.nextDouble()*cellWeights[numSteps];
 		int move = binarySearch(cellWeights, 0, numSteps + 1, num);
 
@@ -344,11 +321,7 @@ public class Ant {
 
 	// find the leftmost mid such that target < weights[mid]; eg.target=10,
 	// weight[mid]=12
-<<<<<<< HEAD
-	private static int binarySearch(int[] weights, int start, int end, int target) {
-=======
 	private static int binarySearch(double[] weights, int start, int end, double target) { //was int for weights and target
->>>>>>> d813a055bec855a0f3c04b6473c02220e9e5a0b4
 		while (start < end) {
 			int mid = start + (end - start) / 2;
 			if (target <= weights[mid]) {

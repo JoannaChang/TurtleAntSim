@@ -146,9 +146,6 @@ public class Direction {
 	public int getY() {
 		return yDir;
 	}
-<<<<<<< HEAD
-
-=======
 	
 	//added 5/2/19
 	public void setDir(int xDir,int yDir) {
@@ -156,7 +153,6 @@ public class Direction {
 	}
 	//
 	
->>>>>>> d813a055bec855a0f3c04b6473c02220e9e5a0b4
 	/**
 	 * Turn randomly within a certain range of degrees
 	 * 

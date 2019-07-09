@@ -20,11 +20,7 @@ public class NestCell implements Cell {
 	private Arena arena;
 
 	// keep track of pheromone and ants in nest
-<<<<<<< HEAD
-	private int pheromone = 8;
-=======
-	private double pheromone = 8; //was double
->>>>>>> d813a055bec855a0f3c04b6473c02220e9e5a0b4
+	private double pheromone = 8; 
 	private int numAnts = 0;
 	// private int newPher = 0; //uncomment to update pheromone after all the ants
 	// have moved in a time step
@@ -80,11 +76,7 @@ public class NestCell implements Cell {
 		return layer;
 	}
 	
-<<<<<<< HEAD
-	synchronized public int getPheromone() {
-=======
 	synchronized public double getPheromone() {
->>>>>>> d813a055bec855a0f3c04b6473c02220e9e5a0b4
 		return pheromone;
 	}
 
@@ -97,8 +89,7 @@ public class NestCell implements Cell {
 	 */
 	synchronized public void visit(int antID) {
 		pheromone = Math.min(pheromone + pherStrength, maxPher); // comment to only update pher after one time step
-		// newPher = Math.min(newPher + pherStrength, maxPher); //uncomment to only
-		// update pher after one time step
+		// newPher = Math.min(newPher + pherStrength, maxPher); //uncomment to only update pher after one time step
 		numAnts++;
 		visited = true;
 		activity.add(new Activity(arena.getNumSimulations(), arena.getNumSteps(), layer, row, col, -1, -1, -1, antID,
@@ -121,16 +112,8 @@ public class NestCell implements Cell {
 	 */
 	synchronized public void pherDecay() {
 		// pheromone = newPher;
-<<<<<<< HEAD
-		pheromone = Math.max((int) (pheromone - pheromone * decayRate), BASEPHER); 
-		if (pheromone <= BASEPHER) {
-=======
-//		pheromone = Math.max((int) (pheromone - pheromone * decayRate), BASEPHER);
-		pheromone = Math.max((pheromone - pheromone * decayRate), BASEPHER); // added this
+		pheromone = Math.max((pheromone - pheromone * decayRate), BASEPHER); 
 		if (pheromone <= BASEPHER) { 
-//		if (pheromone < BASEPHER) {//added 4/17
-
->>>>>>> d813a055bec855a0f3c04b6473c02220e9e5a0b4
 			visited = false;
 		}
 		// newPher = pheromone;

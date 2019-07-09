@@ -52,19 +52,18 @@ public class Bridge {
 		return entryCell == end1 || entryCell == end2;
 	}
 
-<<<<<<< HEAD
-=======
-	//added 5/2
+	/**
+	 * @return if you're at the first end of the bridge. helps keep track of which
+	 *         end of the bridge you're on
+	 */
 	public boolean endOne(Cell nextCell) {
-		if(nextCell == end1) {
+		if (nextCell == end1) {
 			return true;
-		}
-		else{ 
+		} else {
 			return false;
 		}
 	}
-	
->>>>>>> d813a055bec855a0f3c04b6473c02220e9e5a0b4
+
 	/**
 	 * @return the first cell the ant goes on, according to the cell it enters from
 	 */
@@ -95,9 +94,7 @@ public class Bridge {
 	 */
 	synchronized public void pherDecay() {
 		for (int i = 1; i < length + 1; i++) {
-//			if(theBridge [1][i].visited()) { //added 4/17 //taken out 4/18
-				theBridge[1][i].pherDecay();
-//			}
+			theBridge[1][i].pherDecay();
 		}
 	}
 
@@ -105,7 +102,6 @@ public class Bridge {
 	 * Reset the cells of the bridge
 	 */
 	synchronized public void reset() {
-
 		for (int i = 0; i < length + 2; i++) {
 			theBridge[1][i].reset();
 		}
