@@ -82,7 +82,11 @@ public class Arena extends JPanel {
 	private String activityFile;
 
 	// rate of pheromone decay
+<<<<<<< HEAD
+	private double decayRate = 0.05;
+=======
 	private double decayRate = 0.05; // was 0.05
+>>>>>>> d813a055bec855a0f3c04b6473c02220e9e5a0b4
 
 	/**
 	 * Constructor for the arena
@@ -202,8 +206,12 @@ public class Arena extends JPanel {
 			
 			// TODO: check if different here; originally in paint method
 			// decrease the pheromones of the bridges
+<<<<<<< HEAD
+			for (Bridge bridge : bridges) {
+=======
 //			Collections.shuffle(bridges);
 			for (Bridge bridge : bridges){
+>>>>>>> d813a055bec855a0f3c04b6473c02220e9e5a0b4
 				bridge.pherDecay();
 			}
 
@@ -254,12 +262,15 @@ public class Arena extends JPanel {
 
 		// paint only if the simulation has started
 		if (started) {
+<<<<<<< HEAD
+=======
 			//TODO: check if there was an issue of putting this here
 			// decrease the pheromones of the bridges
 //			for (Bridge bridge : bridges) {
 //				bridge.pherDecay();
 //			}
 			
+>>>>>>> d813a055bec855a0f3c04b6473c02220e9e5a0b4
 			super.paint(g);
 			Graphics2D g2 = (Graphics2D) g;
 
@@ -313,12 +324,20 @@ public class Arena extends JPanel {
 			// System.out.println("hi");
 			// }
 
+<<<<<<< HEAD
+			//TODO: check if there was an issue of putting this here
+=======
 //			//TODO: check if there was an issue of putting this here
+>>>>>>> d813a055bec855a0f3c04b6473c02220e9e5a0b4
 //			// decrease the pheromones of the bridges
 //			for (Bridge bridge : bridges) {
 //				bridge.pherDecay();
 //			}
+<<<<<<< HEAD
+			
+=======
 //			
+>>>>>>> d813a055bec855a0f3c04b6473c02220e9e5a0b4
 			// graphics
 			// paint ants red
 			synchronized (ants) {

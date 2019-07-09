@@ -52,6 +52,8 @@ public class Bridge {
 		return entryCell == end1 || entryCell == end2;
 	}
 
+<<<<<<< HEAD
+=======
 	//added 5/2
 	public boolean endOne(Cell nextCell) {
 		if(nextCell == end1) {
@@ -62,6 +64,7 @@ public class Bridge {
 		}
 	}
 	
+>>>>>>> d813a055bec855a0f3c04b6473c02220e9e5a0b4
 	/**
 	 * @return the first cell the ant goes on, according to the cell it enters from
 	 */

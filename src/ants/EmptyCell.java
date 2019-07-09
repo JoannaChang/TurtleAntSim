@@ -16,7 +16,11 @@ public class EmptyCell implements Cell {
 	private int type = Cell.EMPTY;
 
 	// keep track of pheromone and ants in nest
+<<<<<<< HEAD
+	private int pheromone = 0;
+=======
 	private double pheromone = 0; //was int
+>>>>>>> d813a055bec855a0f3c04b6473c02220e9e5a0b4
 	private int numAnts = 0;
 	// private int newPher = 0; //uncomment to update pheromone after all the ants
 	// have moved in a time step
@@ -64,7 +68,11 @@ public class EmptyCell implements Cell {
 		return layer;
 	}
 
+<<<<<<< HEAD
+	synchronized public int getPheromone() {
+=======
 	synchronized public double getPheromone() {
+>>>>>>> d813a055bec855a0f3c04b6473c02220e9e5a0b4
 		return pheromone;
 	}
 
@@ -101,10 +109,14 @@ public class EmptyCell implements Cell {
 	 */
 	synchronized public void pherDecay() {
 		// pheromone = newPher;
+<<<<<<< HEAD
+		pheromone = Math.max((int) (pheromone - pheromone * decayRate), 0);
+=======
 //		pheromone = Math.max((int) (pheromone - pheromone * decayRate), 0);
 //		pheromone = Math.max((int) (pheromone - pheromone * decayRate), 0);
 		pheromone = Math.max((pheromone - pheromone * decayRate), 0); // added this
 
+>>>>>>> d813a055bec855a0f3c04b6473c02220e9e5a0b4
 		if (pheromone <= pherStrength) {
 //		if (pheromone < pherStrength) {//added 4/17
 			visited = false;

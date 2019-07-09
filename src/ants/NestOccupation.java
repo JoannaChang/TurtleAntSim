@@ -18,8 +18,12 @@ public class NestOccupation {
 	private int numSimulation;
 
 	// pheromone factor and amount of pheromone in nest
+<<<<<<< HEAD
+	private int pherFactor, pher;
+=======
 	private int pherFactor;
 	private double pher; //was int
+>>>>>>> d813a055bec855a0f3c04b6473c02220e9e5a0b4
 
 	public NestOccupation(String nestName, double pher, int numAnts, int numSimulation, int pherFactor) {
 		this.numAnts = numAnts;

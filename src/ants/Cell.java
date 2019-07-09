@@ -15,7 +15,11 @@ public interface Cell {
 	public int getCol();
 	public int getLayer();
 	public int getType();
+<<<<<<< HEAD
+	public int getPheromone();
+=======
 	public double getPheromone(); // was int
+>>>>>>> d813a055bec855a0f3c04b6473c02220e9e5a0b4
 	public int getAnts();
 
 	public void visit(int antID);

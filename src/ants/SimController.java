@@ -15,7 +15,11 @@ import javax.swing.JFrame;
  * 
  * @author Joanna Chang
  */
+<<<<<<< HEAD
+
+=======
 //need summer 10a
+>>>>>>> d813a055bec855a0f3c04b6473c02220e9e5a0b4
 public class SimController {
 
 	public SimController() {
@@ -24,14 +28,21 @@ public class SimController {
 
 		try {
 			// load a properties file
+<<<<<<< HEAD
+			input = new FileInputStream("SummerSim5d.properties");
+=======
 			input = new FileInputStream("SummerSim7c.properties");
+>>>>>>> d813a055bec855a0f3c04b6473c02220e9e5a0b4
 			prop.load(input);
 
 			// get arena info
 			String[] layers = prop.getProperty("arena").split(":"); //layers split by ":"
 			String[] ar = layers[0].split(";"); //rows split by ":"
 			int col = ar[0].split(",").length; //cells split by ","
+<<<<<<< HEAD
+=======
 			
+>>>>>>> d813a055bec855a0f3c04b6473c02220e9e5a0b4
 			int row = ar.length;
 
 			String[][][] arenaArray = new String[layers.length][row][col];

@@ -242,6 +242,11 @@ public class ArenaArray {
 	public static void main(String[] s) {
 		// make arena array
 		// TODO: run this multiple times to make diff layers of arrays
+<<<<<<< HEAD
+		ArenaArray a = new ArenaArray(4, 4, 17, false);
+		a.addBoxBridge(0, 0, 0, 1, 'H', 10);
+		a.addBoxBridge(0, 0, 1, 0, 'V', 10);
+=======
 //		ArenaArray a = new ArenaArray(4, 4, 17, false);
 //		a.addBoxBridge(0, 0, 0, 1, 'H', 10);
 //		a.addBoxBridge(0, 0, 1, 0, 'V', 10);
@@ -264,12 +269,43 @@ public class ArenaArray {
 		//transposed for summer
 		ArenaArray a = new ArenaArray(4, 4, 17, false);
 		a.addBoxBridge(0, 0, 0, 1, 'H', 10);
+>>>>>>> d813a055bec855a0f3c04b6473c02220e9e5a0b4
 		a.addBoxBridge(0, 1, 0, 2, 'H', 10);
 		a.addBoxBridge(0, 2, 0, 3, 'H', 10);
 //		a.addBoxBridge(0, 2, 1, 2, 'V', 10); // take out for linear connection
 		a.addBoxBridge(0, 3, 1, 3, 'V', 10);
 		a.addBoxBridge(1, 2, 2, 2, 'V', 10);
 		a.addBoxBridge(1, 2, 1, 3, 'H', 10);
+<<<<<<< HEAD
+		a.addBoxBridge(0, 2, 1, 3, 'D', 10); // diagonal bridge
+		a.addBoxBridge(2, 0, 3, 0, 'V', 10);
+		a.addBoxBridge(2, 1, 3, 1, 'V', 10);
+		a.addBoxBridge(2, 1, 2, 2, 'H', 10);
+
+		a.addBoxBridge(3, 2, 3, 3, 'H', 10); // Fall only
+
+		// Fall R nests
+		a.addBoxNest(0, 2, "R1");
+		a.addBoxNest(0, 3, "R2");
+		a.addBoxNest(1, 2, "R3");
+		a.addBoxNest(1, 3, "R4");
+
+		// Fall D nests
+		a.addBoxNest(2, 0, "D1");
+		a.addBoxNest(3, 1, "D2");
+		a.addBoxNest(2, 2, "D3");
+		a.addBoxNest(3, 3, "D4");
+
+		// // Summer R nests
+		// a.addBoxNest(0, 3, "R1");
+		// a.addBoxNest(1, 2, "R2");
+		// a.addBoxNest(1, 3, "R3");
+		//
+		// // Summer D nests
+		// a.addBoxNest(3, 0, "D1");
+		// a.addBoxNest(2, 1, "D2");
+		// a.addBoxNest(3, 2, "D3");
+=======
 		a.addBoxBridge(2, 2, 2, 3, 'H', 10);
 
 		a.addBoxBridge(0, 0, 1, 0, 'V', 10);
@@ -350,6 +386,7 @@ public class ArenaArray {
 //		a.addBoxNest(4, 1, "D2");
 //		a.addBoxNest(3, 2, "D3");
 //		a.addBoxNest(4, 3, "D4");
+>>>>>>> d813a055bec855a0f3c04b6473c02220e9e5a0b4
 
 		// make uninteresting arena: mirrored in both sections
 		// a.addBoxNest(0, 2, "R1");

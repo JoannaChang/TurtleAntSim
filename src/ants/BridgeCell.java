@@ -66,6 +66,16 @@ public class BridgeCell implements Cell {
 		return 0; // do nothing
 	}
 
+<<<<<<< HEAD
+	synchronized public int getPheromone() {
+		return pheromone;
+	}
+
+	synchronized public int getAnts() {
+		return numAnts;
+	}
+
+=======
 	synchronized public double getPheromone() {
 		return pheromone;
 	}
@@ -74,6 +84,7 @@ public class BridgeCell implements Cell {
 		return numAnts;
 	}
 
+>>>>>>> d813a055bec855a0f3c04b6473c02220e9e5a0b4
 	/**
 	 * Update pheromone when ant visits a cell
 	 */
@@ -101,9 +112,13 @@ public class BridgeCell implements Cell {
 	 */
 	synchronized public void pherDecay() {
 		// pheromone = newPher;
+<<<<<<< HEAD
+		pheromone = Math.max((int) (pheromone - pheromone * decayRate), 0);
+=======
 //		pheromone = Math.max((int) (pheromone - pheromone * decayRate), 0);
 
 		pheromone = Math.max((pheromone - pheromone * decayRate), 0); // added this
+>>>>>>> d813a055bec855a0f3c04b6473c02220e9e5a0b4
 		if (pheromone <= pherStrength) {
 //		if (pheromone < pherStrength) {//added 4/17
 			visited = false;
