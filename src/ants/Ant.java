@@ -64,7 +64,7 @@ public class Ant {
 	private static final int VISION_RANGE = 180;
 
 	// base weight of a cell during weighted random movement
-	private static final int CHANCE_MOVE = 12;
+	private static final int CHANCE_MOVE = 12; //was 12
 
 	// base chance that an ant will exit a nest (50%)
 	private static final int CHANCE_EXIT = 500;
@@ -296,7 +296,6 @@ public class Ant {
 		} else {
 			cellWeights[numSteps] = cellWeights[numSteps - 1];
 		}
-
 		// randomly generate number and find move that corresponds with number
 		double num = motionGen.nextDouble()*cellWeights[numSteps];
 		int move = binarySearch(cellWeights, 0, numSteps + 1, num);

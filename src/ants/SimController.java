@@ -24,7 +24,7 @@ public class SimController {
 
 		try {
 			// load a properties file
-			input = new FileInputStream("SummerSim12.properties");
+			input = new FileInputStream("Summer7c_vary_ps.properties");
 			prop.load(input);
 
 			// get arena info

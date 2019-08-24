@@ -20,7 +20,7 @@ public class NestCell implements Cell {
 	private Arena arena;
 
 	// keep track of pheromone and ants in nest
-	private double pheromone = 8; 
+	private double pheromone = 8; // updated to 0, shold be 8
 	private int numAnts = 0;
 	// private int newPher = 0; //uncomment to update pheromone after all the ants
 	// have moved in a time step
@@ -42,7 +42,7 @@ public class NestCell implements Cell {
 
 	// base pheromone represents greater likelihood an ant will explore a nest over
 	// an empty space
-	private static final int BASEPHER = 8;
+	private static final int BASEPHER = 8; //should be 8
 
 	/**
 	 * Constructor for a nest cell

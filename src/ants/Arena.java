@@ -220,6 +220,14 @@ public class Arena extends JPanel {
 							numSimulations, pherFactor));
 				}
 				
+//				for (int layer = 0; layer < arenaArray.length; layer++) {
+//					for (int row = 0; row < arenaArray[0].length; row++) {
+//						for (int col = 0; col < arenaArray[0][0].length; col++) {
+//							System.out.println(theArena[layer][row][col].getPheromone());
+//						}
+//					}
+//				}
+						
 				System.out.println("Simulation: " + numSimulations);
 				numSimulations++;
 
