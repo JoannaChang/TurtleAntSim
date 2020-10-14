@@ -83,6 +83,10 @@ public class Arena extends JPanel {
 
 	// rate of pheromone decay
 	private double decayRate = 0.05; // was 0.05
+	
+	private int cellAttrac;
+	private double chanceTurn;
+	private int nestAttrac;
 
 	/**
 	 * Constructor for the arena
@@ -91,7 +95,7 @@ public class Arena extends JPanel {
 	 */
 	public Arena(String[][][] array, int[][] bridges, String nestFile, String activityFile, int totalSteps,
 			int totalSimulations, int numAnts, int startRow, int startCol, int boxSize, int pherStrength, int maxPher,
-			int pherFactor) {
+			int pherFactor, int cellAttrac, double chanceTurn, int nestAttrac) {
 
 		this.arenaArray = array;
 		this.bridgeArray = bridges;
@@ -110,6 +114,11 @@ public class Arena extends JPanel {
 		this.startRow = startRow;
 		this.startCol = startCol;
 		this.boxSize = boxSize;
+		
+		this.chanceTurn = chanceTurn;
+		this.cellAttrac = cellAttrac;
+		this.nestAttrac = nestAttrac;
+		
 	}
 
 	/**
@@ -123,7 +132,7 @@ public class Arena extends JPanel {
 
 		// add ants and start them
 		for (int i = 0; i < numAnts; i++) {
-			Ant a = new Ant(i, startRow, startCol, theArena, this, pherFactor, new Direction(), activity);
+			Ant a = new Ant(i, startRow, startCol, theArena, this, pherFactor, new Direction(), activity, cellAttrac, chanceTurn);
 			ants.add(a);
 			// a.start();
 		}
@@ -148,7 +157,7 @@ public class Arena extends JPanel {
 						theArena[layer][row][col] = new WallCell(layer, row, col);
 					} else if (arenaArray[layer][row][col].charAt(0) == 'N') {
 						theArena[layer][row][col] = new NestCell(layer, row, col, pherStrength, maxPher,
-								arenaArray[layer][row][col].substring(1), activity, this, decayRate);
+								arenaArray[layer][row][col].substring(1), activity, this, decayRate, nestAttrac);
 						theNests.put(theArena[layer][row][col], arenaArray[layer][row][col].substring(1));
 					}
 				}
@@ -343,7 +352,7 @@ public class Arena extends JPanel {
 
 		//TODO: see if you can reset without making new ants again
 		for (int i = 0; i < numAnts; i++) {
-			Ant a = new Ant(i, startRow, startCol, theArena, this, pherFactor, new Direction(), activity);
+			Ant a = new Ant(i, startRow, startCol, theArena, this, pherFactor, new Direction(), activity, cellAttrac, chanceTurn);
 			ants.add(a);
 			// a.start(); // uncomment for threading
 		}
@@ -383,7 +392,7 @@ public class Arena extends JPanel {
 				csvPrinter = new CSVPrinter(writer,
 						CSVFormat.DEFAULT.withHeader("Time", "AntID", "Activity", "Simulation", "FromLayer", "FromRow",
 								"FromCol", "FromBoxRow", "FromBoxCol", "ToLayer", "ToRow", "ToCol", "ToBoxRow",
-								"ToBoxCol", "Name", "PheromoneStrength", "MaxPheromone", "PherFactor"));
+								"ToBoxCol", "Name", "PheromoneStrength", "MaxPheromone", "PherFactor", "ChanceTurn","CellAttrac", "NestAttrac"));
 			}
 			//write each activity as a row in csv file
 			for (Activity a : activity) {
@@ -395,7 +404,7 @@ public class Arena extends JPanel {
 						fromRow, fromCol, (fromRow - fromRow / boxSize) / boxSize,
 						(fromCol - fromCol / boxSize) / boxSize, a.getToLayer(), toRow, toCol,
 						(toRow - toRow / boxSize) / boxSize, (toCol - toCol / boxSize) / boxSize, a.getName(),
-						pherStrength, maxPher, pherFactor);
+						pherStrength, maxPher, pherFactor,chanceTurn, cellAttrac, nestAttrac);
 			}
 			csvPrinter.flush();
 			csvPrinter.close();
@@ -424,12 +433,12 @@ public class Arena extends JPanel {
 			} else {
 				BufferedWriter writer = Files.newBufferedWriter(Paths.get(filePath));
 				csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT.withHeader("Nest", "NumAnts", "NestType",
-						"Simulation", "PheromoneStrength", "MaxPheromone", "PherFactor", "nestPher"));
+						"Simulation", "PheromoneStrength", "MaxPheromone", "PherFactor", "nestPher","ChanceTurn","CellAttrac", "NestAttrac"));
 			}
 			//write each nest occupation as a row in csv file
 			for (NestOccupation n : nestOccupation) {
 				csvPrinter.printRecord(n.getName(), n.getAnts(), "" + n.getName().charAt(0), n.getSimulation(),
-						pherStrength, maxPher, pherFactor, n.getPher());
+						pherStrength, maxPher, pherFactor, n.getPher(),chanceTurn, cellAttrac, nestAttrac);
 			}
 			csvPrinter.flush();
 			csvPrinter.close();

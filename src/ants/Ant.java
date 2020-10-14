@@ -58,13 +58,17 @@ public class Ant {
 	// chances of exploration and turning
 	private static final double CHANCE_EXPLORE = 0.5; // higher chance of exploration got more ants in nests
 	private static final double CHANCE_TURN = 0.2; // higher chance of turning got more ants in nests
+	private final double chanceTurn; //was 12
 
+	
 	// degree that an ant can turn or see
 	private static final int TURNING_RANGE = 180;
 	private static final int VISION_RANGE = 180;
 
 	// base weight of a cell during weighted random movement
 	private static final int CHANCE_MOVE = 12; //was 12
+	private final int cellAttrac; //was 12
+
 
 	// base chance that an ant will exit a nest (50%)
 	private static final int CHANCE_EXIT = 500;
@@ -73,7 +77,7 @@ public class Ant {
 	 * Constructor for an ant
 	 */
 	public Ant(int antID, int row, int col, Cell[][][] world, Arena arena, int pherFactor, Direction direction,
-			List<Activity> activity) {
+			List<Activity> activity, int cellAttrac, double chanceTurn) {
 		this.id = antID;
 		this.world = world;
 		this.row = row + motionGen.nextInt(10) - 5;
@@ -82,6 +86,9 @@ public class Ant {
 		this.pherFactor = pherFactor;
 		this.direction = direction;
 		this.activity = activity;
+		
+		this.cellAttrac = cellAttrac;
+		this.chanceTurn = chanceTurn;
 
 		// set current position
 		currCell = world[0][this.row][this.col];
@@ -101,7 +108,7 @@ public class Ant {
 		}
 
 		// have a chance of turning
-		if (Math.random() < CHANCE_TURN) {
+		if (Math.random() < chanceTurn) {
 			direction.turn(TURNING_RANGE);
 		}
 
@@ -212,7 +219,7 @@ public class Ant {
 		// add the bridge as a possible step
 		if (currCell.hasBridge()) {
 			Cell firstCell = currCell.getBridge().firstCell(currCell);
-			cellPher.put(firstCell, firstCell.getPheromone() + CHANCE_MOVE); //added + CHANCE_MOVE 5/2
+			cellPher.put(firstCell, firstCell.getPheromone() + cellAttrac); //added + CHANCE_MOVE 5/2
 		}
 
 		// for every possible step
@@ -230,9 +237,9 @@ public class Ant {
 
 			// add neighboring cells if they're not a wall
 			if (i == 0) {
-				cellPher.put(neighbor, (double)CHANCE_MOVE); // staying in place is not affected by pheromones // was int
+				cellPher.put(neighbor, (double)cellAttrac); // staying in place is not affected by pheromones // was int
 			} else if (neighbor.getType() != Cell.WALL) {
-				cellPher.put(neighbor, neighbor.getPheromone() + CHANCE_MOVE);
+				cellPher.put(neighbor, neighbor.getPheromone() + cellAttrac);
 			}
 		}
 
@@ -278,9 +285,9 @@ public class Ant {
 
 			if (neighbor.getType() != Cell.WALL) {
 				if (i == 0) {
-					cellWeights[i] = CHANCE_MOVE; // weight of staying in place is not affected by pheromones
+					cellWeights[i] = cellAttrac; // weight of staying in place is not affected by pheromones
 				} else {
-					cellWeights[i] = cellWeights[i - 1] + CHANCE_MOVE + neighbor.getPheromone();
+					cellWeights[i] = cellWeights[i - 1] + cellAttrac + neighbor.getPheromone();
 				}
 			}
 			// don't move into a wall
@@ -292,7 +299,7 @@ public class Ant {
 		// add the bridge as a potential step
 		if (currCell.hasBridge()) {
 			Cell firstCell = currCell.getBridge().firstCell(currCell);
-			cellWeights[numSteps] = cellWeights[numSteps - 1] + CHANCE_MOVE + firstCell.getPheromone();
+			cellWeights[numSteps] = cellWeights[numSteps - 1] + cellAttrac + firstCell.getPheromone();
 		} else {
 			cellWeights[numSteps] = cellWeights[numSteps - 1];
 		}

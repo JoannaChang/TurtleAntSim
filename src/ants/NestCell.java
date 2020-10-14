@@ -43,12 +43,13 @@ public class NestCell implements Cell {
 	// base pheromone represents greater likelihood an ant will explore a nest over
 	// an empty space
 	private static final int BASEPHER = 8; //should be 8
+	private int nestAttrac;
 
 	/**
 	 * Constructor for a nest cell
 	 */
 	public NestCell(int layer, int row, int col, int pherStrength, int maxPher, String name, List<Activity> activity,
-			Arena arena, double decayRate) {
+			Arena arena, double decayRate, int nestAttrac) {
 		this.pherStrength = pherStrength;
 		this.maxPher = maxPher;
 		this.row = row;
@@ -58,6 +59,7 @@ public class NestCell implements Cell {
 		this.arena = arena;
 		this.layer = layer;
 		this.decayRate = decayRate;
+		this.nestAttrac = nestAttrac;
 	}
 
 	public int getType() {
@@ -112,8 +114,8 @@ public class NestCell implements Cell {
 	 */
 	synchronized public void pherDecay() {
 		// pheromone = newPher;
-		pheromone = Math.max((pheromone - pheromone * decayRate), BASEPHER); 
-		if (pheromone <= BASEPHER) { 
+		pheromone = Math.max((pheromone - pheromone * decayRate), nestAttrac); 
+		if (pheromone <= nestAttrac) { 
 			visited = false;
 		}
 		// newPher = pheromone;
@@ -141,7 +143,7 @@ public class NestCell implements Cell {
 	synchronized public void reset() {
 		visited = false;
 		numAnts = 0;
-		pheromone = BASEPHER;
+		pheromone = nestAttrac;
 //		newPher = BASEPHER;
 	}
 

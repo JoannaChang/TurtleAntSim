@@ -77,7 +77,8 @@ public class EmptyCell implements Cell {
 	 * Update pheromone and note when an ant visits the cell
 	 */
 	synchronized public void visit(int antID) {
-		pheromone = Math.min(pheromone + pherStrength, maxPher);
+		//pheromone = Math.min(pheromone + pherStrength, maxPher); //TEST: commented out
+		
 		// newPher = Math.min(newPher + pherStrength, maxPher);
 		numAnts++;
 		visited = true;
@@ -103,7 +104,7 @@ public class EmptyCell implements Cell {
 	synchronized public void pherDecay() {
 		// pheromone = newPher;
 		// pheromone = Math.max((int) (pheromone - pheromone * decayRate), 0);
-		pheromone = Math.max((pheromone - pheromone * decayRate), 0); 
+		//pheromone = Math.max((pheromone - pheromone * decayRate), 0); //TEST: commented out
 
 		if (pheromone <= pherStrength) {
 			visited = false;

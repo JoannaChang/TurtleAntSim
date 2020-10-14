@@ -78,7 +78,7 @@ public class BridgeCell implements Cell {
 	 * Update pheromone when ant visits a cell
 	 */
 	synchronized public void visit(int antID) {
-		pheromone = Math.min(pheromone + pherStrength, maxPher);
+		//pheromone = Math.min(pheromone + pherStrength, maxPher); //TEST: commented out
 		// newPher = Math.min(newPher + pherStrength, maxPher);
 		numAnts++;
 		visited = true;
@@ -103,7 +103,7 @@ public class BridgeCell implements Cell {
 		// pheromone = newPher;
 		// pheromone = Math.max((int) (pheromone - pheromone * decayRate), 0);
 
-		pheromone = Math.max((pheromone - pheromone * decayRate), 0); // added this
+		//pheromone = Math.max((pheromone - pheromone * decayRate), 0); // //TEST: commented out
 		if (pheromone <= pherStrength) {
 			visited = false;
 		}
