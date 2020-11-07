@@ -24,7 +24,7 @@ public class SimController {
 
 		try {
 			// load a properties file
-			input = new FileInputStream("limited_cavity.properties");
+			input = new FileInputStream("simulations/limited_cavity.properties");
 			prop.load(input);
 
 			// get arena info
