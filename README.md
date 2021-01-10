@@ -62,7 +62,7 @@ input = new FileInputStream("simulations/file_name.properties");
 Run the simulations from the cloned directory using
 ```sh
 javac -d bin -cp lib/commons-csv-1.8.jar -sourcepath src src/ants/SimController.java
-java -cp:lib/commons-csv-1.8.jar bin ants.SimController  
+java -cp bin:lib/commons-csv-1.8.jar ants.SimController  
 ```
 A window should pop up showing the movement of the ants in each simulation. At the end of all simulations, two csv files will be outputted describing:
 1. cavity occupation: number of ants in each cavity at the end of each simulation
