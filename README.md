@@ -53,7 +53,7 @@ from the cloned directory to print out three lines designating
 
 Copy the output to the properies file. 
 
-In the **src/SimController.java** file, designate the properties file by editting the line
+In the **src/ants/SimController.java** file, designate the properties file by editting the line
 ```sh
 input = new FileInputStream("simulations/file_name.properties");
 ```
